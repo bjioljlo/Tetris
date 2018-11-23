@@ -12,7 +12,13 @@ public class Webserver : MonoBehaviour{
 	string logout_webname = "logout.php";
 	string highscore_webname = "update_highscore.php";
 	string top10_webname = "get_top10.php";
-    
+	string check_server_webname = "check_server.php";
+
+	bool serverOK = true;
+	float check_server_gap = 1;
+	float server_off_line_gap = 5;
+	float time_temp;
+
 	//PlayerManager m_playerManager;
 
 	//-----------------網路上copy的
@@ -41,7 +47,13 @@ public class Webserver : MonoBehaviour{
             Debug.Log("無連線狀態");
 
 		StartCoroutine(PingConnect("218.161.4.121"));
+      
     }
+
+	private void Update()
+	{
+		Check_server();
+	}
 
 	public void set_playerManager(PlayerManager playerManager)
 	{
@@ -72,6 +84,39 @@ public class Webserver : MonoBehaviour{
 	{
 		StartCoroutine(Addplayer_json(info));
 	}
+    
+    void Check_server()
+	{
+		if(Time.time - time_temp < check_server_gap)
+		{
+			return;
+		}
+
+		if(Time.time - time_temp > server_off_line_gap)
+		{
+			serverOK = false;
+            PlayerManager.set_MessegeBox("server no OK!");
+		}
+
+		StartCoroutine(Check_serverOK());
+	}
+
+	IEnumerator Check_serverOK()
+	{
+		string url = "http://" + WebserverIP + "/" + check_server_webname;
+        var www = UnityWebRequest.Get(url);
+        yield return www.Send();
+
+		//接收新增的回傳資料
+        string str_temp = www.downloadHandler.text;
+		if(str_temp != "")
+		{
+			serverOK = true;
+			PlayerManager.set_MessegeBox("");
+		}
+        
+		time_temp = Time.time;
+	}
 
 	IEnumerator GetTop10_json()
 	{
@@ -91,7 +136,6 @@ public class Webserver : MonoBehaviour{
         else
         {
 			PlayerManager.set_AllTop10(JsonConvert.DeserializeObject<playerInfo[]>(www.downloadHandler.text));
-			//Debug.LogError("get top10 from sql");
         }
 
 	}

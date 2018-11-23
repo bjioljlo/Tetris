@@ -163,7 +163,7 @@ public class PlayerManager : IManager {
 
 	public static void set_AllTop10(playerInfo[] playerInfo)
 	{
-		if (playerInfo[0] == null)//如果傳入空資料直接跳出
+		if (playerInfo == null || playerInfo[0] == null)//如果傳入空資料直接跳出
 		{
 			return;
 		}
