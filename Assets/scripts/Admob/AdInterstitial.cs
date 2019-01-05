@@ -11,6 +11,8 @@ public class AdInterstitial : MonoBehaviour {
 	public string unitId;
 	private InterstitialAd interstitialAd;
 
+	bool IsTest;
+
 	private void Awake()
 	{
 		if(ins == null)
@@ -24,8 +26,9 @@ public class AdInterstitial : MonoBehaviour {
 		}
 	}
 
-	public void LoadJumpAds()
+	public void LoadJumpAds(bool istest)
 	{
+		IsTest = istest;
 		this.ReRequestInterstitial();
 	}
 
@@ -42,11 +45,17 @@ public class AdInterstitial : MonoBehaviour {
 
             this.interstitialAd = new InterstitialAd(this.unitId);
 
+			// Called when the ad is closed.
+			this.interstitialAd.OnAdClosed += this.HandleOnAdClosed;
+
             AdRequest.Builder _builder = new AdRequest.Builder();
 
             if (Debug.isDebugBuild) _builder.AddTestDevice(AdCommon.DeviceIdForAdmob);
+			if (IsTest) _builder.AddTestDevice(AdCommon.DeviceIdForAdmob);
 
             this.interstitialAd.LoadAd(_builder.Build());
+
+
         }
 	}
 
@@ -54,7 +63,6 @@ public class AdInterstitial : MonoBehaviour {
 	{
 		if (this.interstitialAd != null && this.interstitialAd.IsLoaded())
         {
-
             this.interstitialAd.Show();
         }
 	}
@@ -63,4 +71,9 @@ public class AdInterstitial : MonoBehaviour {
 	{
 		return this.interstitialAd.IsLoaded();
 	}
+
+	void HandleOnAdClosed(object sender, EventArgs args)
+    {
+		this.ReRequestInterstitial();
+    }
 }

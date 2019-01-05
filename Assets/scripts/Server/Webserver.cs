@@ -14,7 +14,7 @@ public class Webserver : MonoBehaviour{
 	string top10_webname = "get_top10.php";
 	string check_server_webname = "check_server.php";
 
-	bool serverOK = true;
+	bool serverOK = false;
 	float check_server_gap = 1;
 	float server_off_line_gap = 5;
 	float time_temp;
@@ -111,8 +111,8 @@ public class Webserver : MonoBehaviour{
         string str_temp = www.downloadHandler.text;
 		if(str_temp != "")
 		{
+			if (!serverOK) PlayerManager.set_MessegeBox("");
 			serverOK = true;
-			PlayerManager.set_MessegeBox("");
 		}
         
 		time_temp = Time.time;

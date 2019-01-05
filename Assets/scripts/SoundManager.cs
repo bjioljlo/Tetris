@@ -4,9 +4,50 @@ using UnityEngine;
 
 public class SoundManager : IManager {
 
+	//使用單例模式
+	private static SoundManager m_SoundManager = null;
+	private SoundManager(){}
+	public static SoundManager getSoundManager
+	{
+		get
+		{
+			if(m_SoundManager == null)
+			{
+				m_SoundManager = new SoundManager();
+			}
+			return m_SoundManager;
+		}
+	}
+
+
     public static float BGM_Value = 0;
     public static float Effect_Value = 0;
     public static AudioSource m_BGM,m_Effect,m_BGM2;
+
+	private void Awake()
+	{
+		if(m_SoundManager == null)
+		{
+			m_SoundManager = this;
+			DontDestroyOnLoad(this);
+		}
+		else if(this != m_SoundManager)
+		{
+			Destroy(gameObject);
+		}
+		m_BGM = GameObject.Find("SoundBGM").GetComponent<AudioSource>();
+        m_BGM2 = GameObject.Find("SoundBackground").GetComponent<AudioSource>();
+        m_Effect = GameObject.Find("SoundEffect").GetComponent<AudioSource>();
+	}
+
+   
+	private void Update()
+	{
+		if(!Grid.getGrid.IsPause && !m_BGM.isPlaying && Grid.getGrid.IsStart)
+		{
+			PlayBGM();
+		}
+	}
 
 	public static void PlayBGM()
 	{

@@ -1,10 +1,6 @@
 fileFormatVersion: 2
-guid: 4ea812277bd54760a027a183ca7d6314
-labels:
-- gvh
-- gvh_targets-editor
-- gvh_version-1.2.79.0
-timeCreated: 1534406943
+guid: ca702ab2789e44d84a19dc7b7cd1195f
+timeCreated: 1546399825
 licenseType: Free
 PluginImporter:
   serializedVersion: 2
@@ -23,16 +19,15 @@ PluginImporter:
       first:
         Editor: Editor
       second:
-        enabled: 1
+        enabled: 0
         settings:
           DefaultValueInitialized: true
     data:
       first:
-        Windows Store Apps: WindowsStoreApps
+        iPhone: iOS
       second:
-        enabled: 0
-        settings:
-          CPU: AnyCPU
+        enabled: 1
+        settings: {}
   userData: 
   assetBundleName: 
   assetBundleVariant: 

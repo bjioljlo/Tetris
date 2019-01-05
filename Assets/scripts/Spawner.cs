@@ -186,12 +186,16 @@ public class Spawner : MonoBehaviour {
 			Destroy(FindObjectOfType<iTween>());
 
 		FindObjectOfType<Restart_Button>().moveIn();
-        FindObjectOfType<Best_Text>().moveIn();
-        FindObjectOfType<Score_Text>().moveIn();
-        FindObjectOfType<mainGameover_IUI>().moveIn();
-        FindObjectOfType<Pause_Button>().moveOut();
+		FindObjectOfType<Best_Text>().moveIn();
+		FindObjectOfType<Score_Text>().moveIn();
+		FindObjectOfType<mainGameover_IUI>().moveIn();
+		FindObjectOfType<Pause_Button>().moveOut();
 
-		AdManager.ShowJumpAds();
+		if (AdManager.IsJumpAdsLoaded())
+		{
+			AdManager.ShowJumpAds();	
+		}
+
 
 		if(m_WatchAdsTime >= 5 && btn_WatchAds.IsActive())
 		{

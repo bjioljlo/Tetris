@@ -208,6 +208,7 @@ public class PlayerManager : IManager {
 	public static void set_MessegeBox(string str)
 	{
 		txt_MessegeBox.text = str;
+		Debug.Log("[MessegeBox]: " + str);
 	}
 
 	public static void get_top10()
