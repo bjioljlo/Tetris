@@ -93,7 +93,12 @@ public abstract class Group : IMainBehavier {
 				// It's valid. Update grid.
 				updateGrid ();
 
-			} else {
+			}
+			else if(Grid.getGrid.IsPause)
+			{
+				return;
+			}
+			else {
 				// It's not valid. revert.
 				transform.position += new Vector3 (0, 1, 0);
 

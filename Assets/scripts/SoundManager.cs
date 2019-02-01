@@ -23,6 +23,7 @@ public class SoundManager : IManager {
     public static float BGM_Value = 0;
     public static float Effect_Value = 0;
     public static AudioSource m_BGM,m_Effect,m_BGM2;
+	public static Dictionary<string, AudioClip> Dicry_ClickSounds = new Dictionary<string, AudioClip>();
 
 	private void Awake()
 	{
@@ -73,4 +74,17 @@ public class SoundManager : IManager {
         m_Effect.volume = Effect_Value;
     }
     
+	public static AudioClip getClickSound(string objName, string SoundName)
+	{
+		if(Dicry_ClickSounds.ContainsKey(SoundName))
+		{
+			Debug.Log(objName + " get soundName: " + SoundName);
+		}
+		else
+		{
+			Debug.Log(objName + " Load soundName: " + SoundName);
+			Dicry_ClickSounds.Add(SoundName,Resources.Load<AudioClip>(SoundName));
+		}
+		return Dicry_ClickSounds[SoundName];
+	}
 }

@@ -17,15 +17,19 @@ public class Debug_log : MonoBehaviour {
 	RectTransform debug_context;//scrollview 的context
 	Text debug_text;////scrollview 的text
 	int debug_LineNumber = 0;//debug的行數
-	int debug_TempLines = 999;
+	int debug_Linetemp = 0;//抑制彈跳的暫存數字
 	Vector3 localpos = new Vector3();
+	GameObject Obj_debug_text;
+	int debug_totalLineNumber = 0;
+	//bool debug_setAreaStart = false;
 
 	// Use this for initialization
-	void Start () {
+	void Awake () {
 		sv_debug_Panel = GameObject.Find("debug_ScrollView");
 		IsShowLogToggle = GameObject.Find("Debug_show").GetComponent<Toggle>();
 		debug_context = GameObject.Find("debug_Content").GetComponent<RectTransform>();
-		debug_text = GameObject.Find("Debug_Area").GetComponent<Text>();
+		Obj_debug_text = GameObject.Find("Debug_Area");
+		debug_text = Obj_debug_text.GetComponent<Text>();
 		localpos = sv_debug_Panel.transform.localPosition;
 	}
 	
@@ -40,7 +44,7 @@ public class Debug_log : MonoBehaviour {
             sv_debug_Panel.transform.localPosition = localpos;
 
         }
-		setArea(myLog);
+
 	}
 
 	private void OnEnable()
@@ -55,6 +59,13 @@ public class Debug_log : MonoBehaviour {
 
 	void HandleLog(string logString,string stackTrace,LogType type)
 	{
+
+		if (debug_LineNumber >= 10)
+        {
+			setArea(myLog);
+            changeDebugAreaObj(Instantiate(Obj_debug_text, this.transform));
+        }
+
 		myLog = logString;
 		string newString = "";
 
@@ -102,19 +113,29 @@ public class Debug_log : MonoBehaviour {
 
 		myLog = string.Empty;
 		foreach (string mylog in myLogQueue)
-			myLog += mylog;
+		{
+			if (mylog.Length > 100)
+				myLog += mylog.Remove(100);
+			else
+				myLog += mylog;
+		}
+
+		debug_totalLineNumber++;
+
+		setArea(myLog);
 	}
 
 	void setArea(string strDebug)
 	{
-		if (debug_TempLines == debug_LineNumber)
+		if (debug_LineNumber == debug_Linetemp)
 			return;
-		debug_context.sizeDelta = new Vector2(debug_context.sizeDelta.x, 28 * debug_LineNumber);
-		debug_text.GetComponent<RectTransform>().sizeDelta = debug_context.sizeDelta;
-		if(debug_LineNumber>23)
-		    debug_context.localPosition = new Vector3(debug_context.localPosition.x , 28 * (debug_LineNumber - 23) , debug_context.localPosition.z);
+		debug_context.sizeDelta = new Vector2(debug_context.sizeDelta.x, 28 * debug_totalLineNumber);
+		//debug_text.GetComponent<RectTransform>().sizeDelta = debug_context.sizeDelta;
+		if(debug_totalLineNumber>23)
+			debug_context.localPosition = new Vector3(debug_context.localPosition.x , 28 * (debug_totalLineNumber - 23) , debug_context.localPosition.z);
+
 		debug_text.text = strDebug;
-		debug_TempLines = debug_LineNumber;
+		debug_Linetemp = debug_LineNumber;
 	}
 
 	Toggle GetToggle()
@@ -126,4 +147,11 @@ public class Debug_log : MonoBehaviour {
 
 		return IsShowLogToggle;
     }
+
+	void changeDebugAreaObj(GameObject newObj)
+	{
+		Obj_debug_text = newObj;
+		debug_text = Obj_debug_text.GetComponent<Text>();
+		myLogQueue.Clear();
+	}
 }

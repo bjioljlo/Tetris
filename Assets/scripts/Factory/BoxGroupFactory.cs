@@ -16,14 +16,17 @@ public abstract class BoxGroupFactory
         BentchAction,none
     }
     public GameObject m_target;
-    
+	public Sprite m_boxSkin;
+
     public abstract GameObject CreatGroupByName(GroupType name);
     public void setTarget(GameObject target)
     {
         m_target = target;
     }
-
-    
+	public void setBoxSkin(Sprite skin)
+	{
+		m_boxSkin = skin;
+	}
 
 }
 
@@ -53,7 +56,14 @@ public class CreatGroupFactoryByName : BoxGroupFactory
 			case GroupType.itemGroup:
 				return new ConcreteItemGroup(m_mans, btn_left, btn_right, btn_down, btn_row).Create(m_target);
             case GroupType.normalGroup:
-				return new ConcreteNormalGeoup(m_mans, btn_left, btn_right, btn_down, btn_row).Create(m_target);
+				{
+					ConcreteNormalGeoup temp = new ConcreteNormalGeoup(m_mans, btn_left, btn_right, btn_down, btn_row);
+					temp.BoxSkin = m_boxSkin;
+					GameObject obj_temp = temp.Create(m_target);
+					temp.setSkin();
+					return obj_temp;	
+				}
+
             default:
                 Debug.LogError(name + "無法生產物件");
                 break;
@@ -120,6 +130,13 @@ public abstract class Creator
     public Button btn_row;
 	public Group groupTemp;
 	public GameObject m_target;
+	public Sprite m_boxSkin;
+
+	public Sprite BoxSkin
+	{
+		set{ m_boxSkin = value; }
+		get{ return m_boxSkin; }
+	}
 
 	public Creator(GameObject[] mans, Button left, Button right, Button down, Button row)
 	{
@@ -142,6 +159,14 @@ public abstract class Creator
         group.m_moveAct.AddBtnListener();
         return group;
     }
+	public void setSkin(){
+		SpriteRenderer[] spr_temp = m_target.GetComponentsInChildren<SpriteRenderer>();
+		foreach(SpriteRenderer child in spr_temp)
+		{
+			if (m_boxSkin == null) return;
+			child.sprite = m_boxSkin;
+		}
+	}
 }
 
 

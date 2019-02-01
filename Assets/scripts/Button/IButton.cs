@@ -6,8 +6,8 @@ using UnityEngine.UI;
 public abstract class IButton : IUI
 {
     Button m_button;
-    AudioClip m_ClickSound;
-    public string m_SoundName = "Click.mp3";
+	AudioClip m_ClickSound;
+    public string m_SoundName = "Click";
 
     public virtual void ClickAction() { }
 
@@ -23,14 +23,17 @@ public abstract class IButton : IUI
 
     public virtual AudioClip readSound()//讀取音效檔案
     {
-        Debug.Log(name + " get soundName: " + m_SoundName);
-        return Resources.Load<AudioClip>(m_SoundName);
+		
+		return SoundManager.getClickSound(name,m_SoundName);
     }
 
     public void PlayClickSound()
     {
         if (m_ClickSound == null)
-            Debug.LogError("clicksound is null");
+		{
+			Debug.LogError("clicksound is null");
+		}
+            
         SoundManager.m_Effect.PlayOneShot(m_ClickSound);
     }
 

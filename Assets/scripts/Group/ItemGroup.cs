@@ -30,7 +30,7 @@ public class ItemGroup : Group {
         {
             if(!IsStop)//不是停止的道具才要新增下一個方塊
             {
-                FindObjectOfType<Spawner>().spawnNext();
+				FindObjectOfType<Spawner>().spawnNext();
                 //恢復可以按下往下按鈕
                 m_moveAct.downPush = false;
                 //移除監聽

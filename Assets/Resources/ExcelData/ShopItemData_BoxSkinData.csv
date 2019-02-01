@@ -1,0 +1,8 @@
+﻿ShopID,ShopNumber,ShopName,ShopKind,ShopPrice,ShopImage,ShopObj,IsOpen,
+1,1111,running,Normal,100,bluebox,Shop_boxcolor,True,
+2,1112,qqqq,Normal,100,bluebox,Shop_boxcolor,True,
+3,1113,aaaa,Normal,100,bluebox,Shop_boxcolor,True,
+4,1114,gggg,Normal,100,brickwallbox,Shop_boxcolor,True,
+5,1115,ddddd,Normal,100,brickwallbox,Shop_boxcolor,True,
+6,1116,tttt,Active,100,brickwallbox,Shop_boxcolor,True,
+7,1117,ddddd,Active,100,brickwallbox,Shop_boxcolor,True,

@@ -35,7 +35,7 @@ public class Grid {
 	public GameObject GO_lastBox = null;
     public float ManSpeed = 0.5f;//人物行走速度
     public float BoxSpeed = 1f;//方塊下降速度
-	public int BagLeftBox = 50;//包包中剩餘的方塊數量
+	public int BagLeftBox = 20;//包包中剩餘的方塊數量
 	public int WatchAdsTimer = 5;//可以接關的秒數
 
 
@@ -79,6 +79,7 @@ public class Grid {
 		{
 			PlayerPrefs.SetInt("BestScore", BestScore);
 		}
+        
     }
 
 	public void setSpawner(Spawner spawner)

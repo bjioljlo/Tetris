@@ -28,6 +28,8 @@ public class Man : IMainBehavier {
 	AudioClip Sound_Jump;
 	AudioClip Sound_EatBag;
 
+	SpriteRenderer m_sprite;
+
 	public void setManMoveable(ManMoveable manMoveable)
 	{
 		ManMove = manMoveable;
@@ -56,6 +58,8 @@ public class Man : IMainBehavier {
 
 		Sound_Jump = Resources.Load<AudioClip>("Sound_Jump");
 		Sound_EatBag = Resources.Load<AudioClip>("Sound_EatBag");
+
+		m_sprite = transform.GetComponentInChildren<SpriteRenderer>();
 	}
 
 
@@ -65,7 +69,12 @@ public class Man : IMainBehavier {
         {
             float temp = float.Parse(str);
             if (temp > 0)
-                ManSpeed = temp;
+			{
+				ManSpeed = temp;
+				Grid.getGrid.ManSpeed = temp;
+				setManMoveable(new NormalManMove(this.gameObject, null));
+			}
+                
         }
         catch
         {
@@ -176,4 +185,9 @@ public class Man : IMainBehavier {
 		itemGroup = group;
 	}
 
+
+	public void setManSkin(Sprite nowSkin)
+	{
+		m_sprite.sprite = nowSkin;
+	}
 }

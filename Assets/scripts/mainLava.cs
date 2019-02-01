@@ -34,6 +34,15 @@ public class mainLava : IMainBehavier {
         }
     }
 
+	public void setLavaSkin(Sprite m_sprite)
+	{
+		SpriteRenderer[] spriteRenderers = GetComponentsInChildren<SpriteRenderer>();
+		foreach(SpriteRenderer child in spriteRenderers)
+		{
+			child.sprite = m_sprite;
+		}
+	}
+
     public void DebugAddSpeed(string str)
     {
         try

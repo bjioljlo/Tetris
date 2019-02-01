@@ -31,6 +31,7 @@ public class Spawner : MonoBehaviour {
 	public Text txt_WatchAdsTime;
 	public Button btn_WatchAds;
 	int m_WatchAdsTime;
+	public Sprite BoxSkin = null;
 
 	public void Awake()
     {
@@ -82,11 +83,12 @@ public class Spawner : MonoBehaviour {
 		txt_WatchAdsTime.gameObject.SetActive(false);
 
 		btn_WatchAds = GameObject.Find("Btn_WatchADS").GetComponent<Button>();
-
+        
 
 	}
 	
 	public void spawnNext() {
+
         BoxGroupFactory creatgroup = new CreatGroupFactoryByName(mans, btn_left, btn_right, btn_down, btn_row);
 
 		if(IsItemDownTog.isOn)//物品開關
@@ -109,7 +111,9 @@ public class Spawner : MonoBehaviour {
 		{
 			int i = Random.Range(0, groups.Length);
 			creatgroup.setTarget(Instantiate(groups[i], transform.position, Quaternion.identity));
+			creatgroup.setBoxSkin(BoxSkin);
             creatgroup.CreatGroupByName(BoxGroupFactory.GroupType.normalGroup);
+            
 		}
 
 	}
