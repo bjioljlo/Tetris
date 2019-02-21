@@ -73,6 +73,7 @@ public class AdManager : IManager {
     //Rewarded Ads function------------------by google
 	public static void ShowGoogleBonusAds()
 	{
+		Debug.Log("Show GoogleADS");
 		m_AdRewardedVideo.ShowRewarded();
 	}
 

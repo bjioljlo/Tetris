@@ -71,7 +71,7 @@ public class ShopManager : IManager
 #if UNITY_EDITOR
 		//fileNames = Directory.GetFiles(Application.dataPath + "/Resources/ExcelData", "*.csv");
 #elif UNITY_ANDROID
-		WWW wWW = new WWW(Application.streamingAssetsPath + "/ExcelData");
+		//WWW wWW = new WWW(Application.streamingAssetsPath + "/ExcelData");
 #endif
         
         foreach (string child in fileNames)

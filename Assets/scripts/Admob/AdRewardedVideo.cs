@@ -10,7 +10,7 @@ public class AdRewardedVideo : MonoBehaviour {
 
 	public string unitId;
 
-	private RewardBasedVideoAd rewardBasedVideo;
+	private RewardBasedVideoAd rewardBasedVideo = null;
 
 	bool IsBonusAdsWatched = false;
 
@@ -46,9 +46,10 @@ public class AdRewardedVideo : MonoBehaviour {
 
 	private void RequestRewardBasedVideo()
     {
+		Debug.Log("RequestRewardBasedVideo start");
 		if (!string.IsNullOrEmpty(this.unitId))
 		{
-			Debug.Log("RequestRewardBasedVideo start");
+			
 			if (this.rewardBasedVideo == null)
 			{
 				this.rewardBasedVideo = RewardBasedVideoAd.Instance;
@@ -56,6 +57,8 @@ public class AdRewardedVideo : MonoBehaviour {
 				this.rewardBasedVideo.OnAdRewarded += this.HandleRewardBasedVideoRewarded;
 				// Called when the ad is closed.
                 rewardBasedVideo.OnAdClosed += HandleRewardBasedVideoClosed;
+				rewardBasedVideo.OnAdLoaded += HandleRewardBasedVideoLoaded;
+				rewardBasedVideo.OnAdFailedToLoad += HandleRewardBasedVideoFailLoaded;
 			}
 
 			AdRequest.Builder _builder = new AdRequest.Builder();
@@ -103,6 +106,16 @@ public class AdRewardedVideo : MonoBehaviour {
 			IsBonusAdsWatched = false;
 		}
 		this.RequestRewardBasedVideo();
+    }
+
+	void HandleRewardBasedVideoLoaded(object sender, EventArgs args)
+	{
+		Debug.Log("ADS LoadStart!!!");
+	}
+	void HandleRewardBasedVideoFailLoaded(object sender, AdFailedToLoadEventArgs args)
+    {
+		string type = args.Message;
+		Debug.Log(type);
     }
 
     void GiveAdBonusGoogle()

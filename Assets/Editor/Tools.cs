@@ -6,28 +6,29 @@ using System.IO;
 
 public class Tools : UnityEditor.AssetModificationProcessor {
 
-	static ShopManager m_ShopManager;
+	static ShopManager mShopManager;
+	static ShopManager m_ShopManager { get { return setShopMgr();} }
+
     
-	public static AssetMoveResult OnWillMoveAsset(string oldPath, string newPath)
-    {
-        AssetMoveResult result = AssetMoveResult.DidNotMove;
-		//Debug.Log("OnWillMoveAsset  from: " + oldPath + " to: " + newPath);
-		setShopFileNames(newPath);
-        return result;
-    }
 
-	static void OnWillCreateAsset(string path)
+	public static void setShopFileNames(int FileType,string path)
 	{
-		setShopFileNames(path);
-	}
+		string typeName = "";
+		switch (FileType)
+		{
+			case 0:
+				typeName = "*.json";
+				break;
+			case 1:
+				typeName = "*.csv";
+				break;
+			case 2:
+				typeName = "*.xml";
+				break;
+		}
+     
 
-	static void setShopFileNames(string path)
-	{
-		setShopMgr();
-
-        if (m_ShopManager == null) Debug.LogError("null");
-
-        string[] Temp_fileNames = Directory.GetFiles(Application.dataPath + "/Resources/ExcelData", "*.csv");
+		string[] Temp_fileNames = Directory.GetFiles(Application.dataPath + "/Resources/ExcelData", typeName);
 
         for (int i = 0; i < Temp_fileNames.Length; i++)
         {
@@ -39,8 +40,12 @@ public class Tools : UnityEditor.AssetModificationProcessor {
         Debug.Log(path);
 	}
 
-	static void setShopMgr()
+	static ShopManager setShopMgr()
 	{
-		m_ShopManager = Transform.FindObjectOfType<ShopManager>().GetComponent<ShopManager>();
+		if(mShopManager == null)
+		{
+			mShopManager = Transform.FindObjectOfType<ShopManager>().GetComponent<ShopManager>();
+		}
+		return mShopManager;
 	}
 }

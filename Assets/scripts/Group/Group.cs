@@ -94,10 +94,6 @@ public abstract class Group : IMainBehavier {
 				updateGrid ();
 
 			}
-			else if(Grid.getGrid.IsPause)
-			{
-				return;
-			}
 			else {
 				// It's not valid. revert.
 				transform.position += new Vector3 (0, 1, 0);
@@ -152,6 +148,10 @@ public abstract class Group : IMainBehavier {
 	}
 
 	void updateGrid() {
+		if(Grid.getGrid.IsPause)
+        {
+          return;
+        }
 		// Remove old children from grid
         for (int y = 0; y < Grid.getGrid.Height_Now; ++y) {
 			for (int x = 0; x < Grid.getGrid.Width; ++x) {

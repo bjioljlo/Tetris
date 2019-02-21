@@ -128,17 +128,20 @@ public class PlayerManager : IManager {
 		PlayerPrefs.SetString("PlayerName", playerInfo.Name);
 		PlayerPrefs.SetString("PlayerPasswd", playerInfo.Passwd);
 		PlayerPrefs.SetInt("PlayerHighscore", playerInfo.Highscore);
+		PlayerPrefs.SetInt("GoldCoin", playerInfo.GoldCoin);
 	}
 
 	public static playerInfo LoadPlayerInfo_Local()
 	{
 		string Name, Passwd;
-		int Highscore;
+		int Highscore,Goldcoin;
 		Name = PlayerPrefs.GetString("PlayerName");
 		Passwd = PlayerPrefs.GetString("PlayerPasswd");
 		Highscore = PlayerPrefs.GetInt("PlayerHighscore",0);
+		Goldcoin = PlayerPrefs.GetInt("GoldCoin", 0);
 		playerInfo temp = new playerInfo(Name, Passwd);
 		temp.Highscore = Highscore;
+		temp.GoldCoin = Goldcoin;
 		if (Name == "")
 		{
 			return null;
@@ -288,4 +291,5 @@ public class playerInfo
 	public string Name;
 	public int Highscore;
 	public string Passwd;
+	public int GoldCoin;
 }

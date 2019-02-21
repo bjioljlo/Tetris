@@ -87,6 +87,7 @@ public class Webserver : MonoBehaviour{
     
     void Check_server()
 	{
+		//確認ＳＥＲＶＥＲ狀態的間距，過短就ＲＥＴＵＲＮ掉
 		if(Time.time - time_temp < check_server_gap)
 		{
 			return;
@@ -97,7 +98,7 @@ public class Webserver : MonoBehaviour{
 			serverOK = false;
             PlayerManager.set_MessegeBox("server no OK!");
 		}
-
+      
 		StartCoroutine(Check_serverOK());
 	}
 

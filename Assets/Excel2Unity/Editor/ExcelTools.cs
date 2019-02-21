@@ -160,6 +160,7 @@ public class ExcelTools : EditorWindow
 
 			//刷新本地资源
 			AssetDatabase.Refresh();
+			Tools.setShopFileNames(indexOfFormat,output);
 		}
 
 		//转换完后关闭插件

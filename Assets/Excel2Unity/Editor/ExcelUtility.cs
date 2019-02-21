@@ -88,40 +88,89 @@ public class ExcelUtility
 		//默认读取第一个数据表
 		DataTable mSheet = mResultSet.Tables [0];
 
-		//判断数据表内是否存在数据
-		if (mSheet.Rows.Count < 1)
-			return;
 
-		//读取数据表行数和列数
-		int rowCount = mSheet.Rows.Count;
-		int colCount = mSheet.Columns.Count;
+		foreach (DataTable child in mResultSet.Tables)
+		{
+			//判断数据表内是否存在数据
+            if (mSheet.Rows.Count < 1)
+                return;
 
-		//准备一个列表存储整个表的数据
-		List<Dictionary<string, object>> table = new List<Dictionary<string, object>> ();
+            //读取数据表行数和列数
+            int rowCount = mSheet.Rows.Count;
+            int colCount = mSheet.Columns.Count;
 
-		//读取数据
-		for (int i = 1; i < rowCount; i++) {
-			//准备一个字典存储每一行的数据
-			Dictionary<string, object> row = new Dictionary<string, object> ();
-			for (int j = 0; j < colCount; j++) {
-				//读取第1行数据作为表头字段
-				string field = mSheet.Rows [0] [j].ToString ();
-				//Key-Value对应
-				row [field] = mSheet.Rows [i] [j];
-			}
+            //准备一个列表存储整个表的数据
+            List<Dictionary<string, object>> table = new List<Dictionary<string, object>>();
 
-			//添加到表数据中
-			table.Add (row);
+            //读取数据
+            for (int i = 1; i < rowCount; i++)
+            {
+                //准备一个字典存储每一行的数据
+                Dictionary<string, object> row = new Dictionary<string, object>();
+                for (int j = 0; j < colCount; j++)
+                {
+                    //读取第1行数据作为表头字段
+                    string field = mSheet.Rows[0][j].ToString();
+                    //Key-Value对应
+                    row[field] = mSheet.Rows[i][j];
+                }
+
+                //添加到表数据中
+                table.Add(row);
+            }
+
+            //生成Json字符串
+            string json = JsonConvert.SerializeObject(table, Newtonsoft.Json.Formatting.Indented);
+
+
+			string mJsonPath = ReSetPath(JsonPath, child.TableName);
+            //写入文件
+			using (FileStream fileStream = new FileStream(mJsonPath, FileMode.Create, FileAccess.Write))
+            {
+                using (TextWriter textWriter = new StreamWriter(fileStream, encoding))
+                {
+                    textWriter.Write(json);
+                }
+            }
 		}
 
-		//生成Json字符串
-		string json = JsonConvert.SerializeObject (table, Newtonsoft.Json.Formatting.Indented);
-		//写入文件
-		using (FileStream fileStream=new FileStream(JsonPath,FileMode.Create,FileAccess.Write)) {
-			using (TextWriter textWriter = new StreamWriter(fileStream, encoding)) {
-				textWriter.Write (json);
-			}
-		}
+
+
+
+		////判断数据表内是否存在数据
+		//if (mSheet.Rows.Count < 1)
+		//	return;
+
+		////读取数据表行数和列数
+		//int rowCount = mSheet.Rows.Count;
+		//int colCount = mSheet.Columns.Count;
+
+		////准备一个列表存储整个表的数据
+		//List<Dictionary<string, object>> table = new List<Dictionary<string, object>> ();
+
+		////读取数据
+		//for (int i = 1; i < rowCount; i++) {
+		//	//准备一个字典存储每一行的数据
+		//	Dictionary<string, object> row = new Dictionary<string, object> ();
+		//	for (int j = 0; j < colCount; j++) {
+		//		//读取第1行数据作为表头字段
+		//		string field = mSheet.Rows [0] [j].ToString ();
+		//		//Key-Value对应
+		//		row [field] = mSheet.Rows [i] [j];
+		//	}
+
+		//	//添加到表数据中
+		//	table.Add (row);
+		//}
+
+		////生成Json字符串
+		//string json = JsonConvert.SerializeObject (table, Newtonsoft.Json.Formatting.Indented);
+		////写入文件
+		//using (FileStream fileStream=new FileStream(JsonPath,FileMode.Create,FileAccess.Write)) {
+		//	using (TextWriter textWriter = new StreamWriter(fileStream, encoding)) {
+		//		textWriter.Write (json);
+		//	}
+		//}
 	}
 
 	/// <summary>
@@ -214,45 +263,95 @@ public class ExcelUtility
 		//默认读取第一个数据表
 		DataTable mSheet = mResultSet.Tables [0];
 
-		//判断数据表内是否存在数据
-		if (mSheet.Rows.Count < 1)
-			return;
+		foreach (DataTable child in mResultSet.Tables)
+		{
+			//判断数据表内是否存在数据
+            if (mSheet.Rows.Count < 1)
+                return;
 
-		//读取数据表行数和列数
-		int rowCount = mSheet.Rows.Count;
-		int colCount = mSheet.Columns.Count;
+            //读取数据表行数和列数
+            int rowCount = mSheet.Rows.Count;
+            int colCount = mSheet.Columns.Count;
 
-		//创建一个StringBuilder存储数据
-		StringBuilder stringBuilder = new StringBuilder ();
-		//创建Xml文件头
-		stringBuilder.Append ("<?xml version=\"1.0\" encoding=\"utf-8\"?>");
-		stringBuilder.Append ("\r\n");
-		//创建根节点
-		stringBuilder.Append ("<Table>");
-		stringBuilder.Append ("\r\n");
-		//读取数据
-		for (int i = 1; i < rowCount; i++) {
-			//创建子节点
-			stringBuilder.Append ("  <Row>");
-			stringBuilder.Append ("\r\n");
-			for (int j = 0; j < colCount; j++) {
-				stringBuilder.Append ("   <" + mSheet.Rows [0] [j].ToString () + ">");
-				stringBuilder.Append (mSheet.Rows [i] [j].ToString ());
-				stringBuilder.Append ("</" + mSheet.Rows [0] [j].ToString () + ">");
-				stringBuilder.Append ("\r\n");
-			}
-			//使用换行符分割每一行
-			stringBuilder.Append ("  </Row>");
-			stringBuilder.Append ("\r\n");
+            //创建一个StringBuilder存储数据
+            StringBuilder stringBuilder = new StringBuilder();
+            //创建Xml文件头
+            stringBuilder.Append("<?xml version=\"1.0\" encoding=\"utf-8\"?>");
+            stringBuilder.Append("\r\n");
+            //创建根节点
+            stringBuilder.Append("<Table>");
+            stringBuilder.Append("\r\n");
+            //读取数据
+            for (int i = 1; i < rowCount; i++)
+            {
+                //创建子节点
+                stringBuilder.Append("  <Row>");
+                stringBuilder.Append("\r\n");
+                for (int j = 0; j < colCount; j++)
+                {
+                    stringBuilder.Append("   <" + mSheet.Rows[0][j].ToString() + ">");
+                    stringBuilder.Append(mSheet.Rows[i][j].ToString());
+                    stringBuilder.Append("</" + mSheet.Rows[0][j].ToString() + ">");
+                    stringBuilder.Append("\r\n");
+                }
+                //使用换行符分割每一行
+                stringBuilder.Append("  </Row>");
+                stringBuilder.Append("\r\n");
+            }
+            //闭合标签
+            stringBuilder.Append("</Table>");
+
+			string mXmlPath = ReSetPath(XmlFile, child.TableName);
+
+            //写入文件
+			using (FileStream fileStream = new FileStream(mXmlPath, FileMode.Create, FileAccess.Write))
+            {
+                using (TextWriter textWriter = new StreamWriter(fileStream, Encoding.GetEncoding("utf-8")))
+                {
+                    textWriter.Write(stringBuilder.ToString());
+                }
+            }
 		}
-		//闭合标签
-		stringBuilder.Append ("</Table>");
-		//写入文件
-		using (FileStream fileStream = new FileStream(XmlFile, FileMode.Create, FileAccess.Write)) {
-			using (TextWriter textWriter = new StreamWriter(fileStream,Encoding.GetEncoding("utf-8"))) {
-				textWriter.Write (stringBuilder.ToString ());
-			}
-		}
+
+		////判断数据表内是否存在数据
+		//if (mSheet.Rows.Count < 1)
+		//	return;
+
+		////读取数据表行数和列数
+		//int rowCount = mSheet.Rows.Count;
+		//int colCount = mSheet.Columns.Count;
+
+		////创建一个StringBuilder存储数据
+		//StringBuilder stringBuilder = new StringBuilder ();
+		////创建Xml文件头
+		//stringBuilder.Append ("<?xml version=\"1.0\" encoding=\"utf-8\"?>");
+		//stringBuilder.Append ("\r\n");
+		////创建根节点
+		//stringBuilder.Append ("<Table>");
+		//stringBuilder.Append ("\r\n");
+		////读取数据
+		//for (int i = 1; i < rowCount; i++) {
+		//	//创建子节点
+		//	stringBuilder.Append ("  <Row>");
+		//	stringBuilder.Append ("\r\n");
+		//	for (int j = 0; j < colCount; j++) {
+		//		stringBuilder.Append ("   <" + mSheet.Rows [0] [j].ToString () + ">");
+		//		stringBuilder.Append (mSheet.Rows [i] [j].ToString ());
+		//		stringBuilder.Append ("</" + mSheet.Rows [0] [j].ToString () + ">");
+		//		stringBuilder.Append ("\r\n");
+		//	}
+		//	//使用换行符分割每一行
+		//	stringBuilder.Append ("  </Row>");
+		//	stringBuilder.Append ("\r\n");
+		//}
+		////闭合标签
+		//stringBuilder.Append ("</Table>");
+		////写入文件
+		//using (FileStream fileStream = new FileStream(XmlFile, FileMode.Create, FileAccess.Write)) {
+		//	using (TextWriter textWriter = new StreamWriter(fileStream,Encoding.GetEncoding("utf-8"))) {
+		//		textWriter.Write (stringBuilder.ToString ());
+		//	}
+		//}
         
 	}
 
@@ -273,7 +372,7 @@ public class ExcelUtility
 	}
 
 	/// <summary>
-    /// 设置目标实例的属性
+    /// 重新設定檔案名稱
     /// </summary>
 	string ReSetPath(string oldPath,string sheetName)
 	{
