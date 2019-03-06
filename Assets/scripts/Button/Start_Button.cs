@@ -17,12 +17,14 @@ public class Start_Button : IButton {
         FindObjectOfType<Pause_Button>().moveIn();
         FindObjectOfType<Spawner>().spawnNext();
 		FindObjectOfType<Spawner>().spawnBag();
+		FindObjectOfType<Spawner>().spawnCoin();
         FindObjectOfType<Start_Button>().moveOut();
         FindObjectOfType<ADS_Button>().moveOut();
         FindObjectOfType<Setting_Button>().moveOut();
         FindObjectOfType<Shop_Button>().moveOut();
         FindObjectOfType<Comic_Button>().moveOut();
         FindObjectOfType<Comment_Button>().moveOut();
+		FindObjectOfType<Coin_Text>().moveOut();
 		SoundManager.PlayBGM();
 	}
 }

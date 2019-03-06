@@ -57,7 +57,7 @@ public class PlayerManager : IManager {
         m_webserver.set_playerManager(this);
 
 		InitPlayerManager();
-
+		set_Board();
 	}
 
 	private void Update()
@@ -118,6 +118,12 @@ public class PlayerManager : IManager {
 		}
 	}
 
+	public void ResetPlayerInfo()
+	{
+		main_playerInfo = null;
+		SavePlayerInfo_Local(main_playerInfo);
+	}
+
 	public static void SavePlayerInfo_Local(playerInfo playerInfo)
 	{
 		if(playerInfo == null)
@@ -129,6 +135,9 @@ public class PlayerManager : IManager {
 		PlayerPrefs.SetString("PlayerPasswd", playerInfo.Passwd);
 		PlayerPrefs.SetInt("PlayerHighscore", playerInfo.Highscore);
 		PlayerPrefs.SetInt("GoldCoin", playerInfo.GoldCoin);
+
+		string s = JsonUtility.ToJson(main_playerInfo);
+		PlayerPrefs.SetString("ItemDatas", s);
 	}
 
 	public static playerInfo LoadPlayerInfo_Local()
@@ -142,9 +151,29 @@ public class PlayerManager : IManager {
 		playerInfo temp = new playerInfo(Name, Passwd);
 		temp.Highscore = Highscore;
 		temp.GoldCoin = Goldcoin;
+
+		string s = PlayerPrefs.GetString("ItemDatas");
+		playerInfo vplayerInfo = JsonUtility.FromJson<playerInfo>(s);
+		if (temp.ItemDatas == null)
+        {
+            temp.ItemDatas = new List<ShopItemData>();
+        }
+		if(vplayerInfo != null)
+		{
+			foreach (ShopItemData child in vplayerInfo.ItemDatas)
+            {
+                if (ShopManager.GetShopData_ByShopNumber(child.ShopNumber) != null)
+                {
+                    temp.ItemDatas.Add(ShopManager.GetShopData_ByShopNumber(child.ShopNumber));
+                }
+
+            }
+		}
+
+
 		if (Name == "")
 		{
-			return null;
+			temp.Name = "Player";
 		}
 		return temp;
 	}
@@ -278,8 +307,60 @@ public class PlayerManager : IManager {
 		return true;
 	}
 
+	public static void BuyWithCoin(ShopItemData vShopData,ShopItemKind shopItemKind)
+	{
+		if(main_playerInfo.GoldCoin < vShopData.ShopPrice)
+		{
+			Debug.Log("你的金錢不夠喔");
+			return;
+		}
+		//從這裡看
+        switch (shopItemKind)
+        {
+            case ShopItemKind.Man:
+                {
+					FindObjectOfType<Man>().setManSkin(vShopData.ShopImage);
+                    break;
+                }
+            case ShopItemKind.Box:
+                {
+                    Spawner spawner = FindObjectOfType<Spawner>();
+					spawner.BoxSkin = vShopData.ShopImage;
+                    break;
+                }
+            case ShopItemKind.Lava:
+                {
+                    mainLava m_mainLava = FindObjectOfType<mainLava>();
+					m_mainLava.setLavaSkin(vShopData.ShopImage);
+                    break;
+                }
+            default:
+                break;
+
+        }
+        //已購買過只要換圖即可
+		if (vShopData.ShopPrice == -999)
+        {
+            Debug.Log("已購買過了");
+            return;
+        }
+
+		main_playerInfo.GoldCoin -= vShopData.ShopPrice;
+		main_playerInfo.ItemDatas.Add(vShopData);
+		set_Board();
+		SavePlayerInfo_Local(main_playerInfo);
+	}
+
+	public static void AddWithCoin(int num)
+	{
+		main_playerInfo.GoldCoin += num;
+		set_Board();
+		SavePlayerInfo_Local(main_playerInfo);
+	}
+    
 }
 
+[Serializable]
 public class playerInfo
 {
 	public playerInfo(string name,string passwd)
@@ -292,4 +373,5 @@ public class playerInfo
 	public int Highscore;
 	public string Passwd;
 	public int GoldCoin;
+	public List<ShopItemData> ItemDatas;
 }

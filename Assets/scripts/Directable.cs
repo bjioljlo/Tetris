@@ -5,9 +5,11 @@ using UnityEngine;
 public abstract class Directable {
 
     public GameObject m_target;
+	public Group.groupType mType;
     public Directable(GameObject target)
     {
         m_target = target;
+		mType = m_target.GetComponent<Group>().Type;
     }
     public abstract void GO();
     public bool isValidGridPos()
@@ -69,7 +71,7 @@ public class DirGoLeft : Directable
 		if (m_target == null)
 			return;
 
-		if (m_target.GetComponent<Group>().Type == Group.groupType.bag)
+		if (mType == Group.groupType.bag || mType == Group.groupType.coin)
 			return;
 
         Debug.Log("moveLeft");
@@ -100,7 +102,7 @@ public class DirGoRight : Directable
 		if (m_target == null)
             return;
 
-		if (m_target.GetComponent<Group>().Type == Group.groupType.bag)
+		if (mType == Group.groupType.bag || mType == Group.groupType.coin)
             return;
 
         Debug.Log("moveRight");
@@ -131,7 +133,7 @@ public class DirGoDown : Directable
 		if (m_target == null)
             return;
 
-		if (m_target.GetComponent<Group>().Type == Group.groupType.bag)
+		if (mType == Group.groupType.bag || mType == Group.groupType.coin)
             return;
 
         Debug.Log("fillWithPress");
@@ -150,7 +152,7 @@ public class DirGoRotation : Directable
 		if (m_target == null)
             return;
 
-		if (m_target.GetComponent<Group>().Type == Group.groupType.bag)
+		if (mType == Group.groupType.bag || mType == Group.groupType.coin)
             return;
 
         Debug.Log("rotate");

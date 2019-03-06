@@ -220,6 +220,10 @@ public class ConcreteItemGroup : Creator
 				groupTemp.setGroupType(Group.groupType.bag);
 				groupTemp.setTag();
 				return new BagAction(m_target);
+			case "coin":
+				groupTemp.setGroupType(Group.groupType.coin);
+                groupTemp.setTag();
+                return new BagAction(m_target);
             default:
                 Debug.LogError("GetActionabl is wrong!");
                 return null;
@@ -239,6 +243,8 @@ public class ConcreteItemGroup : Creator
             case "spring":
                 return new ManStopAction(m_mans[0]);
 			case "bag":
+				return new ManStopAction(m_mans[0]);
+			case "coin":
 				return new ManStopAction(m_mans[0]);
             default:
                 Debug.LogError("GetManActionabl is wrong!");

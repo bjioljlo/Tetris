@@ -4,6 +4,7 @@ using UnityEngine;
 using Newtonsoft.Json;
 using UnityEngine.Networking;
 using System;
+using UnityEngine.UI;
 
 public class Webserver : MonoBehaviour{
 	string WebserverIP = "122.116.102.141";
@@ -18,7 +19,8 @@ public class Webserver : MonoBehaviour{
 	float check_server_gap = 1;
 	float server_off_line_gap = 5;
 	float time_temp;
-
+	Toggle IsWebserverToggle;
+	Button btn_Login;
 	//PlayerManager m_playerManager;
 
 	//-----------------網路上copy的
@@ -47,12 +49,32 @@ public class Webserver : MonoBehaviour{
             Debug.Log("無連線狀態");
 
 		StartCoroutine(PingConnect("218.161.4.121"));
+
+		btn_Login = GameObject.Find("Btn_Comic").GetComponent<Button>();
       
     }
 
 	private void Update()
 	{
+		if (!GetToggle().isOn)
+		{
+			btn_Login.interactable = false;
+			return;
+		}
+		else
+		{
+			btn_Login.interactable = true;
+		}
 		Check_server();
+	}
+
+	public Toggle GetToggle()
+	{
+		if(IsWebserverToggle == null)
+		{
+			IsWebserverToggle = GameObject.Find("Debug_IsUseWebserver").GetComponent<Toggle>();   
+		}
+		return IsWebserverToggle;
 	}
 
 	public void set_playerManager(PlayerManager playerManager)
@@ -62,26 +84,31 @@ public class Webserver : MonoBehaviour{
 
 	public void get_top10()
 	{
+		if (!GetToggle().isOn) return;
 		StartCoroutine(GetTop10_json());
 	}
 
 	public void update_highscore(playerInfo info)
 	{
+		if (!GetToggle().isOn) return;
 		StartCoroutine(UpdateHighscore_json(info));
 	}
 
 	public void login_player(playerInfo info)
 	{
+		if (!GetToggle().isOn) return;
 		StartCoroutine(Login_json(info));
 	}
 
 	public void logout_player()
 	{
+		if (!GetToggle().isOn) return;
 		StartCoroutine(Logout_json());
 	}
 
 	public void create_player(playerInfo info)
 	{
+		if (!GetToggle().isOn) return;
 		StartCoroutine(Addplayer_json(info));
 	}
     
@@ -247,6 +274,10 @@ public class Webserver : MonoBehaviour{
 
 	void GetSessionID(Dictionary<string, string> resposeHeaders)
     {
+		if(resposeHeaders == null)
+		{
+			return;
+		}
         foreach (KeyValuePair<string, string> header in resposeHeaders)
         {
             Debug.Log(string.Format("{0}:{1}", header.Key, header.Value));

@@ -9,6 +9,7 @@ public class Man : IMainBehavier {
 
     Score_Text score_text;
     Best_Text best_text;
+	Coin_Text coin_text;
 
     InputField ManSpeedInput;
 	float ManSpeed = Grid.getGrid.ManSpeed;
@@ -39,8 +40,10 @@ public class Man : IMainBehavier {
 	{
         score_text = FindObjectOfType<Score_Text>();
         best_text = FindObjectOfType<Best_Text>();
+		coin_text = FindObjectOfType<Coin_Text>();
 		Grid.getGrid.LoadFile();
         best_text.SetText(Grid.getGrid.BestScore.ToString());
+		coin_text.SetText(Grid.getGrid.Coin.ToString());
 
         Grid.getGrid.Score = 0;
         score_text.SetText(Grid.getGrid.Score.ToString());
@@ -106,6 +109,10 @@ public class Man : IMainBehavier {
 				{
 					AddBagBox();
 				}
+				if(itemGroup.Type == Group.groupType.coin)
+				{
+					AddCoinBox();
+				}
 				itemAction = null;
 				return;
 			}
@@ -141,6 +148,20 @@ public class Man : IMainBehavier {
 		Grid.getGrid.BagLeftBox = Grid.getGrid.BagLeftBox + Grid.getGrid.Height;
 		setHpBar((float)Grid.getGrid.BagLeftBox);
 		SoundManager.m_Effect.PlayOneShot(Sound_EatBag);
+	}
+
+	public void AddCoinBox()
+	{
+		PlayerManager.AddWithCoin(Grid.getGrid.CoinNumber);
+		Grid.getGrid.Coin = PlayerManager.get_main_playerInfo().GoldCoin;
+		coin_text.SetText(Grid.getGrid.Coin.ToString());
+	}
+
+	public void AddCoinBox(int num)
+	{
+		PlayerManager.AddWithCoin(num);
+        Grid.getGrid.Coin = PlayerManager.get_main_playerInfo().GoldCoin;
+        coin_text.SetText(Grid.getGrid.Coin.ToString());
 	}
 
 	public void setHpBar(float hpNum)

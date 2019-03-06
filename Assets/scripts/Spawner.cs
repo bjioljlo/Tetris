@@ -7,6 +7,7 @@ public class Spawner : MonoBehaviour {
 	public GameObject[] groups;
     public GameObject[] items;
 	public GameObject bag;
+	public GameObject coin;
     public Button Btn_ADS;
     public Button Btn_Setting;
     public Button Btn_CloseSetting;
@@ -133,6 +134,20 @@ public class Spawner : MonoBehaviour {
 		}
 	}
 
+	public void spawnCoin()
+	{
+		BoxGroupFactory creatgroup = new CreatGroupFactoryByName(mans, btn_left, btn_right, btn_down, btn_row);
+
+		int times = Random.Range(0, 5 - Grid.getGrid.InitTimes + 1);
+		for (int i = 0; i <= times;i++)
+		{
+			int x = Random.Range(0, Grid.getGrid.Width);
+			int y = Random.Range(Grid.getGrid.Height_Now - Grid.getGrid.Height, Grid.getGrid.Height_Now);
+			creatgroup.setTarget(Instantiate(coin, new Vector3(x, y, 0), Quaternion.identity));
+			creatgroup.CreatGroupByName(BoxGroupFactory.GroupType.itemGroup);
+		}
+	}
+
     public void DebugBoxSpeedChange(string str)
     {
         try
@@ -194,6 +209,7 @@ public class Spawner : MonoBehaviour {
 		FindObjectOfType<Score_Text>().moveIn();
 		FindObjectOfType<mainGameover_IUI>().moveIn();
 		FindObjectOfType<Pause_Button>().moveOut();
+		FindObjectOfType<Coin_Text>().moveIn();
 
 		if (AdManager.IsJumpAdsLoaded())
 		{

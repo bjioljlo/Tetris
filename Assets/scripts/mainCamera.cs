@@ -30,6 +30,7 @@ public class mainCamera : IMainBehavier {
         NextPos = bgTemp.transform.Find("NextPosition").gameObject;
 		Grid.getGrid.InitGrids();
 		FindObjectOfType<Spawner>().spawnBag();
+		FindObjectOfType<Spawner>().spawnCoin();
     }
 
     void FixCameraWithMan()

@@ -31,13 +31,25 @@ public class Grid {
     public bool IsStart = false;//和遊戲開始有關的更新開關
 	public bool IsPause = true;//和暫停有關的更新開關
     public int Score = 0;//目前分數
-    public int BestScore = 0;//最好成績
+	int m_BestScore = 0;
+	public int BestScore 
+	{ 
+		get { 
+			return m_BestScore; 
+		} set { 
+			m_BestScore = value;
+			PlayerManager.get_main_playerInfo().Highscore = m_BestScore;
+		}
+	}//最好成績
+	public int Coin = 0;//當下金幣數量
 	public GameObject GO_lastBox = null;
     public float ManSpeed = 0.5f;//人物行走速度
     public float BoxSpeed = 1f;//方塊下降速度
 	public int BagLeftBox = 20;//包包中剩餘的方塊數量
 	public int WatchAdsTimer = 5;//可以接關的秒數
+	public int CoinNumber = 5;//吃到金幣增加數量
 
+    
 
 
 	public void ResetGrid()
@@ -49,7 +61,8 @@ public class Grid {
     {
 		if(PlayerManager.get_main_playerInfo() != null)
 		{
-			BestScore = PlayerManager.get_main_playerInfo().Highscore;         
+			BestScore = PlayerManager.get_main_playerInfo().Highscore;
+			Coin = PlayerManager.get_main_playerInfo().GoldCoin;
 		}
 		else
 		{
@@ -62,7 +75,7 @@ public class Grid {
     void SaveFile()
     {
 		//有登入帳號
-		if (PlayerManager.get_main_playerInfo() != null)
+		if (PlayerManager.get_main_playerInfo() != null && PlayerManager.get_main_playerInfo().Name != "Player")
 		{
 			//---更新database的highscore
 			playerInfo temp_playerInfo = PlayerManager.get_main_playerInfo();
@@ -77,7 +90,8 @@ public class Grid {
 		}
 		else//無登入帳號
 		{
-			PlayerPrefs.SetInt("BestScore", BestScore);
+			//PlayerPrefs.SetInt("BestScore", BestScore);
+			PlayerManager.SavePlayerInfo_Local(PlayerManager.get_main_playerInfo());
 		}
         
     }
@@ -118,9 +132,8 @@ public class Grid {
         if (Score > BestScore)
         {
             BestScore = Score;
-            SaveFile();
         }
-            
+		SaveFile();
     }
 
 

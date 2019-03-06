@@ -17,9 +17,11 @@ public class Shop_Button : IButton {
 	{
 		
 		base.ClickAction();
+		PlayerManager.set_mainPlayer(PlayerManager.LoadPlayerInfo_Local());
 		foreach (ctl_ScrollView child in array_scrollView)
         {
             child.setScrollView_content();
         }
+
 	}
 }

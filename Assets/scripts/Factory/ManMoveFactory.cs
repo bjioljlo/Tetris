@@ -23,6 +23,8 @@ public class CreateMoveableFactory : ManMoveFactory
 				return new StrongManMove(target, manMoveable);
 			case Group.groupType.bag:
 				return new NormalManMove(target, manMoveable);
+			case Group.groupType.coin:
+				return new NormalManMove(target, manMoveable);
 			default:
 				Debug.LogError("CreateMoveableFactory error!!");
 				break;

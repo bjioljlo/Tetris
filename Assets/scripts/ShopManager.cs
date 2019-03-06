@@ -13,7 +13,7 @@ public class ShopItemData
 {
 	public bool IsOpen;
 	public string ShopNumber, ShopName, ShopKind, ShopID;
-	public float ShopPrice;
+	public int ShopPrice;
 	public Sprite ShopImage;
 	public GameObject ShopObj;
 	public void setShopImage(string name)
@@ -32,6 +32,11 @@ public class ShopItemData
 			ShopObj = Resources.Load<GameObject>("prefabs/Shop_boxcolor");
 
 		}
+	}
+	void setShopPrice(GameObject vShopObj)
+	{
+		GameObject obj_price = vShopObj.transform.Find("Button/Text").gameObject;
+		obj_price.GetComponent<Text>().text = ShopPrice.ToString();
 	}
 }
 [System.Serializable]
@@ -68,12 +73,6 @@ public class ShopManager : IManager
 
 	private void Start()
 	{
-#if UNITY_EDITOR
-		//fileNames = Directory.GetFiles(Application.dataPath + "/Resources/ExcelData", "*.csv");
-#elif UNITY_ANDROID
-		//WWW wWW = new WWW(Application.streamingAssetsPath + "/ExcelData");
-#endif
-        
         foreach (string child in fileNames)
         {
             if (m_ShopItemMenu == null) m_ShopItemMenu = new ShopMenu();
@@ -149,6 +148,22 @@ public class ShopManager : IManager
         
 	}
 
+	public static ShopItemData GetShopData_ByShopNumber(string vshopNum)
+	{
+		foreach (KeyValuePair<ShopItemKind, List<ShopItemData>> child in getShopMenuDictionary())
+		{
+			foreach(ShopItemData child2 in child.Value)
+			{
+				if(child2.ShopNumber == vshopNum)
+				{
+					return child2;
+				}
+			}
+		}
+		Debug.Log("No [" + vshopNum + "] shopItem!!");
+		return null;
+	}
+
     //將ＣＳＶ檔轉換成誠是可以用的ＬＩＳＴ
 	List<ShopItemData> CSV2ListReader(string fileName)
     {
@@ -178,7 +193,7 @@ public class ShopManager : IManager
                 switch (Temp)
                 {
                     case 4:
-						float.TryParse(col, out m_Datas[res.IndexOf(line) - 1].ShopPrice);
+						int.TryParse(col, out m_Datas[res.IndexOf(line) - 1].ShopPrice);
                         break;
                     case 7:
                         if (col == "True") m_Datas[res.IndexOf(line) - 1].IsOpen = true;

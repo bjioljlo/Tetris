@@ -23,7 +23,7 @@ public abstract class Group : IMainBehavier {
 
 	public enum groupType
 	{
-		Normal,bench,bomb,spring,bag
+		Normal,bench,bomb,spring,bag,coin,
 	}
 
 
