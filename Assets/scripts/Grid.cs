@@ -99,9 +99,9 @@ public class Grid {
 	public int WatchAdsTimer { get { return _WatchAdsTimer; }}
 	int _CoinNumber = 5;//吃到金幣增加數量
 	public int CoinNumber{ get { return _CoinNumber; }}
-	float _LavaAddSpeed = 0.5f;//岩漿的加速度
+	float _LavaAddSpeed = 0.01f;//岩漿的加速度
 	public float LavaAddSpeed{ get { return _LavaAddSpeed; }}
-	float _LavaStartSpeed = 0.05f;//岩漿初始速度
+	float _LavaStartSpeed = 0.01f;//岩漿初始速度
 	public float LavaStartSpeed { get { return _LavaStartSpeed; }}
 	float _LavaNowSpeed = 0.01f;//岩漿現在的速度
 	public float LavaNowSpeed { get { return _LavaNowSpeed; }}

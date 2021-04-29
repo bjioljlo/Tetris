@@ -17,6 +17,9 @@ public class mainLava : IMainBehavier {
 
 	private void Start()
     {
+        LavaAddSpeed = Grid.getGrid.LavaAddSpeed;
+	    LavaStartSpeed = Grid.getGrid.LavaStartSpeed;
+        LavaNowSpeed = Grid.getGrid.LavaNowSpeed;
         Go_Man = GameObject.FindGameObjectWithTag("man");
     }
     public override void IPauseUpdate()
