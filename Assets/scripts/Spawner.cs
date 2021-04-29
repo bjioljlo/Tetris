@@ -18,8 +18,6 @@ public class Spawner : MonoBehaviour {
     //人物
     GameObject[] mans;
 
-	public Toggle IsItemDownTog;
-
 	public bool IsDownItem = false;
 
     public Button btn_left;
@@ -27,7 +25,7 @@ public class Spawner : MonoBehaviour {
     public Button btn_down;
     public Button btn_row;
 
-    InputField DebugBoxSpeed;
+    //InputField DebugBoxSpeed;
 
 	public Text txt_WatchAdsTime;
 	public Button btn_WatchAds;
@@ -70,14 +68,6 @@ public class Spawner : MonoBehaviour {
         btn_down = GameObject.Find("Btn_down").GetComponent<Button>();
         btn_row = GameObject.Find("Btn_Row").GetComponent<Button>();
 
-
-        DebugBoxSpeed = GameObject.Find("BoxSpeed").GetComponent<InputField>();
-        DebugBoxSpeed.onValueChanged.AddListener(DebugBoxSpeedChange);
-        DebugBoxSpeed.text = Grid.getGrid.BoxSpeed.ToString();
-
-		IsItemDownTog = GameObject.Find("Debug_IsHasItemDown").GetComponent<Toggle>();
-		IsItemDownTog.isOn = IsDownItem;
-
 		txt_WatchAdsTime = GameObject.Find("Txt_WatchAdsTime").GetComponent<Text>();
 		m_WatchAdsTime = Grid.getGrid.WatchAdsTimer;
 		txt_WatchAdsTime.text = m_WatchAdsTime.ToString();
@@ -92,7 +82,7 @@ public class Spawner : MonoBehaviour {
 
         BoxGroupFactory creatgroup = new CreatGroupFactoryByName(mans, btn_left, btn_right, btn_down, btn_row);
 
-		if(IsItemDownTog.isOn)//物品開關
+		if(IsDownItem)//物品開關
 		{
 			int i = Random.Range(0, groups.Length + 1);
             if (i == groups.Length)
@@ -148,20 +138,6 @@ public class Spawner : MonoBehaviour {
 		}
 	}
 
-    public void DebugBoxSpeedChange(string str)
-    {
-        try
-        {
-            float temp = float.Parse(str);
-            if (temp > 0)
-                Grid.getGrid.BoxSpeed = temp;
-        }
-        catch
-        {
-            Debug.LogError("輸入錯誤 " + str);
-        }
-    }
-
 	public void OpenAccount()
 	{
 		FindObjectOfType<mainAccount_Account>().moveIn();
@@ -211,9 +187,11 @@ public class Spawner : MonoBehaviour {
 		FindObjectOfType<Pause_Button>().moveOut();
 		FindObjectOfType<Coin_Text>().moveIn();
 
-		if (AdManager.IsJumpAdsLoaded())
-		{
+		if (AdManager.IsJumpAdsLoaded()){
 			AdManager.ShowJumpAds();	
+		}
+		else{
+			Debug.Log("ads is not ready");
 		}
 
 

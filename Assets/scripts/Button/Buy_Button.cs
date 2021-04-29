@@ -60,8 +60,8 @@ public class Buy_Button : IButton {
 	{
 		PlayerManager.BuyWithCoin(m_ShopItemData,shopItemKind);
 		Grid.getGrid.Coin = PlayerManager.get_main_playerInfo().GoldCoin;
-		Coin_Text coin_text = FindObjectOfType<Coin_Text>();
-        coin_text.SetText(Grid.getGrid.Coin.ToString());
+		//Coin_Text coin_text = FindObjectOfType<Coin_Text>();
+        //coin_text.SetText(Grid.getGrid.Coin.ToString());
 		setShopItemData(m_ShopItemData, shopItemKind);
 	}
 }

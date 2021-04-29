@@ -306,7 +306,7 @@ public class readJSON : MonoBehaviour {
 	public IEnumerator logoutsession()
 	{
 		var www = UnityWebRequest.Get(logout);
-		yield return www.Send();
+		yield return www.SendWebRequest();
 		if(www.downloadHandler.text != "")
 		{
 			Debug.LogError(www.downloadHandler.text);
@@ -324,7 +324,7 @@ public class readJSON : MonoBehaviour {
         {
 			www.SetRequestHeader("COOKIE", headers["COOKIE"]);
         }
-		yield return www.Send();
+		yield return www.SendWebRequest();
 
 		if (www.error != null)
         {
@@ -357,8 +357,8 @@ public class readJSON : MonoBehaviour {
 		form.AddField("loginName", jsonSaveString(In_addname.text));
 		form.AddField("loginPasswd", jsonSaveString(In_Passwd.text));
 		var www = UnityWebRequest.Post(login, form);
-		yield return www.Send();
-		if(www.isError)
+		yield return www.SendWebRequest();
+		if(www.result == UnityWebRequest.Result.ConnectionError)
 		{
 			Debug.LogError(www.error);
 			yield return null;
@@ -408,13 +408,14 @@ public class readJSON : MonoBehaviour {
 	public IEnumerator Top10json()
     {
 		var www = UnityWebRequest.Get(Top10);
-        yield return www.Send();
+        yield return www.SendWebRequest();
 
 		if (!WebResposeCod(www))
 			yield return null;
 		    
 
-		if (www.isError)
+		//if (www.isNetworkError)
+		if (www.result == UnityWebRequest.Result.ConnectionError)
         {
 			Debug.LogError("UnityWebReqError:" + www.error);
             yield return null;
@@ -457,10 +458,10 @@ public class readJSON : MonoBehaviour {
         {
             www.SetRequestHeader("COOKIE", headers["COOKIE"]);
         }
-		yield return www.Send();
+		yield return www.SendWebRequest();
 		if (www.error != null)
         {
-			Debug.LogError(www.isError);
+			Debug.LogError(www.result);
             yield return null;
         }
 
@@ -476,10 +477,10 @@ public class readJSON : MonoBehaviour {
         WWWForm form = new WWWForm();
         form.AddField("unitydata", jsonSave(MyPlayerData));
 		var www = UnityWebRequest.Post(HighScore, form);
-        yield return www.Send();
+        yield return www.SendWebRequest();
         if (www.error != null)
         {
-            Debug.LogError(www.isError);
+            Debug.LogError(www.result);
             yield return null;
         }
 
@@ -495,8 +496,8 @@ public class readJSON : MonoBehaviour {
         WWWForm form = new WWWForm();
         form.AddField("unitydata", jsonSave(MyPlayerData));
 		var www = UnityWebRequest.Post(AddNew, form);
-		yield return www.Send();
-		if (www.isError)
+		yield return www.SendWebRequest(); 
+		if (www.result == UnityWebRequest.Result.ConnectionError)
         {
 			Debug.LogError(www.error);
             yield return null;

@@ -3,27 +3,22 @@ using System.Collections.Generic;
 using UnityEngine;
 using GoogleMobileAds.Api;
 using System;
+using UnityEngine.Advertisements;
 
-public class AdRewardedVideo : MonoBehaviour {
+public class AdRewardedVideo : UnityAds {
 
 	public static AdRewardedVideo ins;
 
 	public string unitId;
-
 	private RewardBasedVideoAd rewardBasedVideo = null;
-
 	bool IsBonusAdsWatched = false;
-
 	bool IsTest;
 
-	public BonusAdsSupplier bonusAdsSupplier = BonusAdsSupplier.Google;
+	//public static BonusAdsSupplier bonusAdsSupplier = Grid.getGrid.BonusAdsSupplier;
 	public enum BonusAdsSupplier
 	{
 		Google,Unity
 	}
-
-   
-    
 
 	private void Awake()
     {
@@ -40,8 +35,11 @@ public class AdRewardedVideo : MonoBehaviour {
 
 	public void loadRewardedVideo(bool istest)
 	{
+		Debug.Log("load RewardedVideo ADS");
 		IsTest = istest;
 		this.RequestRewardBasedVideo();
+		// Initialize the Ads listener and service:
+		loadUnityADS(IsTest);
 	}
 
 	private void RequestRewardBasedVideo()
@@ -76,19 +74,38 @@ public class AdRewardedVideo : MonoBehaviour {
 
 	public void ShowRewarded()
 	{
-
-		if(this.rewardBasedVideo != null && this.rewardBasedVideo.IsLoaded())
-		{
-			rewardBasedVideo.Show();
-			return;
+		if(AdManager.bonusAdsSupplier == AdRewardedVideo.BonusAdsSupplier.Google){
+			if(this.rewardBasedVideo != null && this.rewardBasedVideo.IsLoaded()){
+				rewardBasedVideo.Show();
+				return;
+			}
+			else{
+            		Debug.Log("Rewarded ad not ready at the moment! Please try again later!");
+        	}
+		}
+		else{
+			if(Advertisement.IsReady(UnityPlacementID)){
+				Advertisement.Show (UnityPlacementID);
+				return;
+			}
+			else{
+            		Debug.Log("Rewarded ad not ready at the moment! Please try again later!");
+        	}
 		}
 		if (this.rewardBasedVideo == null) Debug.Log("rewardAds is null!");
-		if (!this.rewardBasedVideo.IsLoaded()) Debug.Log("rewardAds is not loaded!");
 	}
 
 	public bool IsAdLoad()
 	{
-		return this.rewardBasedVideo.IsLoaded();
+		if(AdManager.bonusAdsSupplier == AdRewardedVideo.BonusAdsSupplier.Google){
+			return this.rewardBasedVideo.IsLoaded();
+		}
+		else if(AdManager.bonusAdsSupplier == AdRewardedVideo.BonusAdsSupplier.Unity){
+			return Advertisement.IsReady(UnityPlacementID);
+		}
+		else{
+			return false;
+		}
 	}
 
 	void HandleRewardBasedVideoRewarded(object sender, Reward args)
@@ -110,7 +127,7 @@ public class AdRewardedVideo : MonoBehaviour {
 
 	void HandleRewardBasedVideoLoaded(object sender, EventArgs args)
 	{
-		Debug.Log("ADS LoadStart!!!");
+		Debug.Log("google RewardADS LoadStart!!!");
 	}
 	void HandleRewardBasedVideoFailLoaded(object sender, AdFailedToLoadEventArgs args)
     {
@@ -122,4 +139,12 @@ public class AdRewardedVideo : MonoBehaviour {
 	{
 		AdManager.GiveAdsBonus();
 	}
+
+	//unity 的回傳
+	public override void resultFinished(){
+		GiveAdBonusGoogle();
+		loadUnityADS(IsTest);
+	}
+    public override void resultSkipped(){}
+    public override void resultFailed(){}
 }

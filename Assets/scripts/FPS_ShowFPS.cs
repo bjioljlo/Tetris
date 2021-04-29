@@ -4,26 +4,16 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class FPS_ShowFPS : IShowFPS {
-	public Toggle IsShowFpsToggle;
+	public bool IsShowFps = false;
 
 	public override void ShowFPS()
 	{
-		if (!GetToggle().isOn)
+		if (!IsShowFps)
         {
             m_text_FPS.text = "";
             return;
         }
         base.ShowFPS();
-	}
-
-	public Toggle GetToggle()
-	{
-		if(IsShowFpsToggle == null)
-		{
-			IsShowFpsToggle = GameObject.Find("Debug_ShowFPS").GetComponent<Toggle>();		
-		}
-
-		return IsShowFpsToggle;
 	}
 
 }

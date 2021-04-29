@@ -9,8 +9,9 @@ public class Debug_log : MonoBehaviour {
 	public Color32 warringColor = new Color32();
 	public Color32 logColor = new Color32();
 
+
+	public bool IsdebugAreaOn = Grid.getGrid.IsdebugAreaOn;
 	string myLog;
-	//int LogLines = 0;
 	Queue myLogQueue = new Queue();
 	Toggle IsShowLogToggle;
 	GameObject sv_debug_Panel;//scrollview 的元件
@@ -35,7 +36,12 @@ public class Debug_log : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if (!GetToggle().isOn)
+		SetLogOn(IsdebugAreaOn);
+	}
+
+	public void SetLogOn(bool IsOn)
+	{
+		if (!IsOn)
         {
             sv_debug_Panel.transform.localPosition = new Vector3(1000, localpos.y);
         }
@@ -44,7 +50,6 @@ public class Debug_log : MonoBehaviour {
             sv_debug_Panel.transform.localPosition = localpos;
 
         }
-
 	}
 
 	private void OnEnable()
@@ -96,7 +101,7 @@ public class Debug_log : MonoBehaviour {
 		newString += "<color=#" +r+g+b+a + ">";
 
 		//if (myLogQueue.Count <= 0)
-			newString += "[" + type + "] : " + myLog;
+		newString += "[" + type + "] : " + myLog;
 		//else
 			//newString += "\n [" + type + "] : " + myLog;
 
@@ -138,20 +143,11 @@ public class Debug_log : MonoBehaviour {
 		debug_Linetemp = debug_LineNumber;
 	}
 
-	Toggle GetToggle()
-    {
-		if (IsShowLogToggle == null)
-        {
-			IsShowLogToggle = GameObject.Find("Debug_show").GetComponent<Toggle>();
-        }
-
-		return IsShowLogToggle;
-    }
-
 	void changeDebugAreaObj(GameObject newObj)
 	{
 		Obj_debug_text = newObj;
 		debug_text = Obj_debug_text.GetComponent<Text>();
 		myLogQueue.Clear();
 	}
+
 }

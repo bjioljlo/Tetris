@@ -11,9 +11,6 @@ public class Man : IMainBehavier {
     Best_Text best_text;
 	Coin_Text coin_text;
 
-    InputField ManSpeedInput;
-	float ManSpeed = Grid.getGrid.ManSpeed;
-
 	public Actionabl itemAction;
 
 	public ManMoveable ManMove;
@@ -31,6 +28,11 @@ public class Man : IMainBehavier {
 
 	SpriteRenderer m_sprite;
 
+	private void Awake()
+	{
+		Grid.getGrid.Man = this;
+	}
+
 	public void setManMoveable(ManMoveable manMoveable)
 	{
 		ManMove = manMoveable;
@@ -46,11 +48,7 @@ public class Man : IMainBehavier {
 		coin_text.SetText(Grid.getGrid.Coin.ToString());
 
         Grid.getGrid.Score = 0;
-        score_text.SetText(Grid.getGrid.Score.ToString());
-
-        ManSpeedInput = GameObject.Find("ManSpeed").GetComponent<InputField>();
-        ManSpeedInput.onValueChanged.AddListener(DebugManAddSpeed);
-        ManSpeedInput.text = ManSpeed.ToString();
+        //score_text.SetText(Grid.getGrid.Score.ToString());
 
 		setManMoveable(new NormalManMove(this.gameObject,null));
 
@@ -66,24 +64,22 @@ public class Man : IMainBehavier {
 	}
 
 
-	public void DebugManAddSpeed(string str)
-    {
-        try
-        {
-            float temp = float.Parse(str);
-            if (temp > 0)
-			{
-				ManSpeed = temp;
-				Grid.getGrid.ManSpeed = temp;
-				setManMoveable(new NormalManMove(this.gameObject, null));
-			}
-                
-        }
-        catch
-        {
-            Debug.LogError("輸入錯誤 " + str);
-        }
-    }
+	//public void DebugManAddSpeed(string str)
+   // {
+   //     try
+   //     {
+   //         float temp = float.Parse(str);
+   //         if (temp > 0)
+			//{
+			//	Grid.getGrid.ManSpeed = temp;
+			//	setManMoveable(new NormalManMove(this.gameObject, null));
+			//}
+    //    }
+    //    catch
+    //    {
+    //        Debug.LogError("輸入錯誤 " + str);
+    //    }
+    //}
 
 	public override void IPauseUpdate()
 	{
@@ -138,9 +134,13 @@ public class Man : IMainBehavier {
 			SoundManager.m_Effect.PlayOneShot(Sound_Jump);
 		}
 		Grid.getGrid.Score = (int)ManMove.Old_Pos.y;
-        score_text.SetText(Grid.getGrid.Score.ToString());
-        if (Grid.getGrid.Score > Grid.getGrid.BestScore)
-            best_text.SetText(Grid.getGrid.Score.ToString());
+        //score_text.SetText(Grid.getGrid.Score.ToString());
+  //      if (Grid.getGrid.Score > Grid.getGrid.BestScore)
+		//{
+		//	//best_text.SetText(Grid.getGrid.Score.ToString());
+		//	Grid.getGrid.BestScore = Grid.getGrid.Score;
+		//}
+            
     }
 
 	public void AddBagBox()
@@ -154,14 +154,14 @@ public class Man : IMainBehavier {
 	{
 		PlayerManager.AddWithCoin(Grid.getGrid.CoinNumber);
 		Grid.getGrid.Coin = PlayerManager.get_main_playerInfo().GoldCoin;
-		coin_text.SetText(Grid.getGrid.Coin.ToString());
+		//coin_text.SetText(Grid.getGrid.Coin.ToString());
 	}
 
 	public void AddCoinBox(int num)
 	{
 		PlayerManager.AddWithCoin(num);
         Grid.getGrid.Coin = PlayerManager.get_main_playerInfo().GoldCoin;
-        coin_text.SetText(Grid.getGrid.Coin.ToString());
+        //coin_text.SetText(Grid.getGrid.Coin.ToString());
 	}
 
 	public void setHpBar(float hpNum)

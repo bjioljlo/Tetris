@@ -49,12 +49,13 @@ public class PlayerManager : IManager {
         }
 
 		main_playerInfo = LoadPlayerInfo_Local();
+		m_webserver = gameObject.AddComponent<Webserver>();
+        m_webserver.set_playerManager(this);
     }
 
 	private void Start()
 	{
-		m_webserver = gameObject.AddComponent<Webserver>();
-        m_webserver.set_playerManager(this);
+
 
 		InitPlayerManager();
 		set_Board();
@@ -118,7 +119,7 @@ public class PlayerManager : IManager {
 		}
 	}
 
-	public void ResetPlayerInfo()
+	public static void ResetPlayerInfo()
 	{
 		main_playerInfo = null;
 		SavePlayerInfo_Local(main_playerInfo);
@@ -330,7 +331,7 @@ public class PlayerManager : IManager {
                 }
             case ShopItemKind.Lava:
                 {
-                    mainLava m_mainLava = FindObjectOfType<mainLava>();
+					mainLava m_mainLava = Grid.getGrid.mainLava;
 					m_mainLava.setLavaSkin(vShopData.ShopImage);
                     break;
                 }
@@ -356,6 +357,11 @@ public class PlayerManager : IManager {
 		main_playerInfo.GoldCoin += num;
 		set_Board();
 		SavePlayerInfo_Local(main_playerInfo);
+	}
+
+	public static void setWebserver(bool IsOn)
+	{
+		m_webserver.IsWebserverOn = IsOn;
 	}
     
 }

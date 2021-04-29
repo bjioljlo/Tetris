@@ -7,6 +7,12 @@ public class mainCamera : IMainBehavier {
     public GameObject NextPos;
     public GameObject Go_Man;
     public List<List<Transform>> grids;
+
+	private void Awake()
+	{
+		Grid.getGrid.mainCamera = this;
+	}
+
 	private void Start()
 	{
         NextPos = GameObject.Find("NextPosition");

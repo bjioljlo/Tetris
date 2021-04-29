@@ -16,11 +16,13 @@ public class Webserver : MonoBehaviour{
 	string check_server_webname = "check_server.php";
 
 	bool serverOK = false;
-	float check_server_gap = 1;
+	bool waitServerRespon = false;
+	float check_server_gap = 1f;
 	float server_off_line_gap = 5;
-	float time_temp;
-	Toggle IsWebserverToggle;
-	Button btn_Login;
+	float time_temp = 0;
+	//Toggle IsWebserverToggle = null;
+	Button btn_RankPage;
+	public bool IsWebserverOn = Grid.getGrid.IsWebserverOn;
 	//PlayerManager m_playerManager;
 
 	//-----------------網路上copy的
@@ -50,32 +52,35 @@ public class Webserver : MonoBehaviour{
 
 		StartCoroutine(PingConnect("218.161.4.121"));
 
-		btn_Login = GameObject.Find("Btn_Comic").GetComponent<Button>();
+		btn_RankPage = GameObject.Find("Btn_Comic").GetComponent<Button>();
+		btn_RankPage.interactable = false;
       
     }
 
 	private void Update()
 	{
-		if (!GetToggle().isOn)
+		if (!IsWebserverOn)
 		{
-			btn_Login.interactable = false;
+			btn_RankPage.interactable = false;
 			return;
 		}
 		else
 		{
-			btn_Login.interactable = true;
+			btn_RankPage.interactable = true;
 		}
+
+
 		Check_server();
 	}
 
-	public Toggle GetToggle()
-	{
-		if(IsWebserverToggle == null)
-		{
-			IsWebserverToggle = GameObject.Find("Debug_IsUseWebserver").GetComponent<Toggle>();   
-		}
-		return IsWebserverToggle;
-	}
+	//public Toggle GetToggle()
+	//{
+	//	if(IsWebserverToggle == null)
+	//	{
+	//		IsWebserverToggle = GameObject.Find("Debug_IsUseWebserver").GetComponent<Toggle>();   
+	//	}
+	//	return IsWebserverToggle;
+	//}
 
 	public void set_playerManager(PlayerManager playerManager)
 	{
@@ -84,48 +89,58 @@ public class Webserver : MonoBehaviour{
 
 	public void get_top10()
 	{
-		if (!GetToggle().isOn) return;
+		if (!IsWebserverOn) return;
 		StartCoroutine(GetTop10_json());
 	}
 
 	public void update_highscore(playerInfo info)
 	{
-		if (!GetToggle().isOn) return;
+		if (!IsWebserverOn) return;
 		StartCoroutine(UpdateHighscore_json(info));
 	}
 
 	public void login_player(playerInfo info)
 	{
-		if (!GetToggle().isOn) return;
+		if (!IsWebserverOn) return;
 		StartCoroutine(Login_json(info));
 	}
 
 	public void logout_player()
 	{
-		if (!GetToggle().isOn) return;
+		if (!IsWebserverOn) return;
 		StartCoroutine(Logout_json());
 	}
 
 	public void create_player(playerInfo info)
 	{
-		if (!GetToggle().isOn) return;
+		if (!IsWebserverOn) return;
 		StartCoroutine(Addplayer_json(info));
 	}
     
-    void Check_server()
+	void Check_server()
 	{
+		if (time_temp <= 0) time_temp = Time.time;
+		//先檢查狀態，暫存的時間過久沒更新將會顯示，並再度更新暫存
+		if (Time.time - time_temp > server_off_line_gap)
+        {
+            serverOK = false;
+            PlayerManager.set_MessegeBox("server no respon!");
+			time_temp = Time.time;
+        }
+		//代表server還未回傳結果必須等待
+        if (waitServerRespon == true) return;
+		//檢查狀態 server已經回傳，但是不對顯示
+        if (serverOK == false)
+        {
+            PlayerManager.set_MessegeBox("server respo but not OK!");
+        }
 		//確認ＳＥＲＶＥＲ狀態的間距，過短就ＲＥＴＵＲＮ掉
 		if(Time.time - time_temp < check_server_gap)
 		{
 			return;
 		}
 
-		if(Time.time - time_temp > server_off_line_gap)
-		{
-			serverOK = false;
-            PlayerManager.set_MessegeBox("server no OK!");
-		}
-      
+        
 		StartCoroutine(Check_serverOK());
 	}
 
@@ -133,6 +148,7 @@ public class Webserver : MonoBehaviour{
 	{
 		string url = "http://" + WebserverIP + "/" + check_server_webname;
         var www = UnityWebRequest.Get(url);
+		waitServerRespon = true;
         yield return www.Send();
 
 		//接收新增的回傳資料
@@ -141,9 +157,10 @@ public class Webserver : MonoBehaviour{
 		{
 			if (!serverOK) PlayerManager.set_MessegeBox("");
 			serverOK = true;
+
 		}
-        
 		time_temp = Time.time;
+		waitServerRespon = false;
 	}
 
 	IEnumerator GetTop10_json()

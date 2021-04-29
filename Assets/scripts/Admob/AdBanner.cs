@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using GoogleMobileAds.Api;
 using System;
+using UnityEngine.Advertisements;
 
-public class AdBanner : MonoBehaviour {
+public class AdBanner : UnityAds {
 
 	public enum BannerSize
     {
@@ -19,8 +20,9 @@ public class AdBanner : MonoBehaviour {
     public static AdBanner ins;
 
     public string unitId;
-    public BannerSize size = BannerSize.BANNER;
-    public AdPosition position = AdPosition.Top;
+    public BannerSize GoogleSize = BannerSize.BANNER;
+    public AdPosition GooglePosition = AdPosition.Top;
+	public BannerPosition UnityPosition = BannerPosition.CENTER;
 
     private BannerView bannerView;
     private Dictionary<BannerSize, AdSize> adSize = new Dictionary<BannerSize, AdSize>(){
@@ -52,7 +54,11 @@ public class AdBanner : MonoBehaviour {
 	public void loadBanner(bool istest)
     {
 		IsTest = istest;
-        this.RequestBanner();
+        this.RequestBanner();//google
+
+		//unity
+		Advertisement.Banner.SetPosition (UnityPosition);
+		loadUnityADS(IsTest);
     }
 
 	private void RequestBanner()
@@ -65,9 +71,8 @@ public class AdBanner : MonoBehaviour {
 				this.bannerView.Destroy();
 				this.bannerView = null;
             }
-
-            this.bannerView = new BannerView(this.unitId, this.adSize[this.size], this.position);
-
+			MobileAds.Initialize(initStatus => {});
+            this.bannerView = new BannerView(this.unitId, this.adSize[this.GoogleSize], this.GooglePosition);
 			// Called when an ad request has successfully loaded.
             this.bannerView.OnAdLoaded += this.HandleOnAdLoaded;
 
@@ -77,7 +82,7 @@ public class AdBanner : MonoBehaviour {
 			if (IsTest) _builder.AddTestDevice(AdCommon.DeviceIdForAdmob);
 
             this.bannerView.LoadAd(_builder.Build());
-			Debug.Log("RequestBanner");
+
         }
 	}
 
@@ -85,7 +90,8 @@ public class AdBanner : MonoBehaviour {
 	{
 		if(this.bannerView != null)
 		{
-			this.bannerView.Show();
+			this.bannerView.Show();//google
+			StartCoroutine(ShowBannerWhenInitialized());//unity
 			Is_showing = true;
 		}
 	}
@@ -94,13 +100,27 @@ public class AdBanner : MonoBehaviour {
 	{
 		if(this.bannerView != null)
 		{
-			this.bannerView.Hide();
+			this.bannerView.Hide();//google
+			Advertisement.Banner.Hide();//unity
 			Is_showing = false;
 		}
 	}
 
+	IEnumerator ShowBannerWhenInitialized () {
+        while (!Advertisement.isInitialized) {
+            yield return new WaitForSeconds(0.3f);
+        }
+        Advertisement.Banner.Show(UnityPlacementID);
+    }
+
+//google 的回傳
 	void HandleOnAdLoaded(object sender, EventArgs args)
     {
-		
+		Debug.Log("google Banner loaded");
     }
+
+//unity 的回傳
+	public override void resultFinished(){}
+    public override void resultSkipped(){}
+    public override void resultFailed(){}
 }

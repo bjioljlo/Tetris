@@ -39,18 +39,10 @@ public class WatchADS_Button : IButton
 		//SoundManager.PlayBGM();
 		//Grid.getGrid.IsPause = false;
 		//FindObjectOfType<Spawner>().spawnNext();
-
-		if(AdManager.bonusAdsSupplier == AdRewardedVideo.BonusAdsSupplier.Google)
-		{
-			if (AdManager.IsGoogleBonusAdsLoaded())
+		if (AdManager.IsBonusAdsLoaded())
             {
-                AdManager.ShowGoogleBonusAds();
+                AdManager.ShowBonusAds();
             }
-		}
-		else if (AdManager.bonusAdsSupplier == AdRewardedVideo.BonusAdsSupplier.Unity)
-		{
-			AdManager.ShowBonusAds();
-		}
 
 	}
 }

@@ -18,26 +18,12 @@ public abstract class ISetting : IUI {
 		//      SoundManager.m_BGM = GameObject.Find("SoundBGM").GetComponent<AudioSource>();
 		//SoundManager.m_BGM2 = GameObject.Find("SoundBackground").GetComponent<AudioSource>();
 		//SoundManager.m_Effect = GameObject.Find("SoundEffect").GetComponent<AudioSource>();
-		dropdown_BonusAdsSupplier = GameObject.Find("BonusADS_Dropdown").GetComponent<Dropdown>();
-		m_adRewardedVideo = GameObject.Find("AdRewardedVideo").GetComponent<AdRewardedVideo>();
+		//dropdown_BonusAdsSupplier = GameObject.Find("BonusADS_Dropdown").GetComponent<Dropdown>();
+		//m_adRewardedVideo = GameObject.Find("AdRewardedVideo").GetComponent<AdRewardedVideo>();
 
         SoundManager.changeBGM_value(scrollbar_BGM.value);
         SoundManager.changeEffect_value(scrollbar_Effect.value);
 
         base.startInit();
 	}
-
-	private void Update()
-	{
-		switch (dropdown_BonusAdsSupplier.value)
-		{
-			case 0:
-				m_adRewardedVideo.bonusAdsSupplier = AdRewardedVideo.BonusAdsSupplier.Google;
-				break;
-			case 1:
-				m_adRewardedVideo.bonusAdsSupplier = AdRewardedVideo.BonusAdsSupplier.Unity;
-				break;
-		}
-	}
-
 }

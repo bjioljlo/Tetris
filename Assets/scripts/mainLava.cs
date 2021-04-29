@@ -6,18 +6,18 @@ using System;
 
 public class mainLava : IMainBehavier {
     public GameObject Go_Man;
-    public float LavaAddSpeed = 0.01f;
-    public float LavaStartSpeed = 0.05f;
-    public float LavaNowSpeed = 0.01f;
-    public InputField DebugText;
+	public float LavaAddSpeed = Grid.getGrid.LavaAddSpeed;
+	public float LavaStartSpeed = Grid.getGrid.LavaStartSpeed;
+	public float LavaNowSpeed = Grid.getGrid.LavaNowSpeed;
 
-    private void Start()
+	private void Awake()
+	{
+		Grid.getGrid.mainLava = this;
+	}
+
+	private void Start()
     {
         Go_Man = GameObject.FindGameObjectWithTag("man");
-
-        DebugText = GameObject.Find("LavaAddSpeed").GetComponent<InputField>();
-        DebugText.onValueChanged.AddListener(DebugAddSpeed);
-        DebugText.text = LavaAddSpeed.ToString();
     }
     public override void IPauseUpdate()
     {
@@ -43,18 +43,18 @@ public class mainLava : IMainBehavier {
 		}
 	}
 
-    public void DebugAddSpeed(string str)
-    {
-        try
-        {
-            float temp = float.Parse(str);
-            if (temp > 0)
-                LavaAddSpeed = temp;
-        }
-        catch
-        {
-            Debug.LogError("輸入錯誤 " + str);
-        }
-    }
+    //public void DebugAddSpeed(string str)
+    //{
+    //    try
+    //    {
+    //        float temp = float.Parse(str);
+    //        if (temp > 0)
+    //            LavaAddSpeed = temp;
+    //    }
+    //    catch
+    //    {
+    //        Debug.LogError("輸入錯誤 " + str);
+    //    }
+    //}
 
 }

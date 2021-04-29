@@ -3,24 +3,33 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class AdManager : IManager {
+	//使用單例模式
+	private static AdManager m_AdManager = null;
+	private AdManager() {}
+	public static AdManager GetAdManager
+	{
+		get{
+			if(m_AdManager == null)
+			{
+				m_AdManager = new AdManager();
+			}
+			return m_AdManager;
+		}
+	}
+
 	static AdBanner m_AdBanner;
 	static AdInterstitial m_AdInterstitial;
 	static AdRewardedVideo m_AdRewardedVideo;
-	static UnityAds m_UnityAds;
 	public string AppID;
-
-	public static AdManager ins;
-
 	public bool IsTestMod = false;
-
-	public static AdRewardedVideo.BonusAdsSupplier bonusAdsSupplier;
+	public static AdRewardedVideo.BonusAdsSupplier bonusAdsSupplier = Grid.getGrid.BonusAdsSupplier;
 
 	private void Awake()
     {
-        if (ins == null)
+        if (m_AdManager == null)
         {
-            ins = this;
-            DontDestroyOnLoad(gameObject);
+            m_AdManager = this;
+            DontDestroyOnLoad(this);
         }
         else if (ins != this)
         {
@@ -34,19 +43,13 @@ public class AdManager : IManager {
         m_AdBanner = GameObject.Find("AdBanner").GetComponent<AdBanner>();
         m_AdInterstitial = GameObject.Find("AdInterstitial").GetComponent<AdInterstitial>();
 		m_AdRewardedVideo = GameObject.Find("AdRewardedVideo").GetComponent<AdRewardedVideo>();
-        m_UnityAds = gameObject.AddComponent<UnityAds>();
 
-       
-		m_AdBanner.loadBanner(IsTestMod);
-		m_AdInterstitial.LoadJumpAds(IsTestMod);
-		m_AdRewardedVideo.loadRewardedVideo(IsTestMod);
+		ReloadADS();
     }
 
 
 	private void Update()
 	{
-		bonusAdsSupplier = m_AdRewardedVideo.bonusAdsSupplier;
-
 		if(Grid.getGrid.IsPause == false && Grid.getGrid.IsStart == true)
 		{
 			if(m_AdBanner.IsShow)
@@ -58,6 +61,14 @@ public class AdManager : IManager {
 			m_AdBanner.ShowBanner();
 		}
 	}
+
+	void ReloadADS(){
+		m_AdBanner.loadBanner(IsTestMod);
+		m_AdInterstitial.LoadJumpAds(IsTestMod);
+		m_AdRewardedVideo.loadRewardedVideo(IsTestMod);
+	}
+
+
     
     //Jump ads function---------------------
 	public static void ShowJumpAds()
@@ -70,37 +81,30 @@ public class AdManager : IManager {
 		return m_AdInterstitial.IsAdLoaded();
 	}
 
-    //Rewarded Ads function------------------by google
-	public static void ShowGoogleBonusAds()
+    //Rewarded Ads function------------------by google and Unity
+	public static void ShowBonusAds()
 	{
-		Debug.Log("Show GoogleADS");
 		m_AdRewardedVideo.ShowRewarded();
 	}
 
-	public static bool IsGoogleBonusAdsLoaded()
+	public static bool IsBonusAdsLoaded()
 	{
 		return m_AdRewardedVideo.IsAdLoad();
-	}
-
-    //Rewarded Ads function------------------by Unity
-	public static void ShowBonusAds()
-	{
-		m_UnityAds.ShowRewardedAd();
 	}
    
 	public static void GiveAdsBonus()
 	{
 		Destroy(Grid.getGrid.GO_lastBox);
         Destroy(FindObjectOfType<NormalGroup>().gameObject);
-        if (FindObjectOfType<mainLava>().transform.position.y <= 3)
+		if (Grid.getGrid.mainLava.transform.position.y <= 3)
         {
-            iTween.MoveAdd(FindObjectOfType<mainLava>().gameObject, iTween.Hash("easetype", iTween.EaseType.easeInOutExpo,
-                                                                                "amount", new Vector3(0, -FindObjectOfType<mainLava>().transform.position.y, 0),
+			iTween.MoveAdd(Grid.getGrid.mainLava.gameObject, iTween.Hash("easetype", iTween.EaseType.easeInOutExpo,
+			                                                             "amount", new Vector3(0, -Grid.getGrid.mainLava.transform.position.y, 0),
                                                                                 "time", 0.5f));
         }
         else
         {
-            iTween.MoveAdd(FindObjectOfType<mainLava>().gameObject, iTween.Hash("easetype", iTween.EaseType.easeInOutExpo,
+			iTween.MoveAdd(Grid.getGrid.mainLava.gameObject, iTween.Hash("easetype", iTween.EaseType.easeInOutExpo,
                                               "amount", new Vector3(0, -3, 0),
                                               "time", 0.5f));
         }
