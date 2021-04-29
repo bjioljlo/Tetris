@@ -42,4 +42,5 @@ public class NotificationManager : IManager
         if(channelID == null) channelID = ChannelID;
 		AndroidNotificationCenter.SendNotification(notification,channelID);
     }
+    
 }
