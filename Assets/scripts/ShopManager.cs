@@ -69,29 +69,37 @@ public class ShopManager : IManager
 		m_static_ShopItemMenu = m_ShopItemMenu;
 
 		base.awake_function();
-	}
-
-	private void Start()
-	{
-        foreach (string child in fileNames)
+		foreach (string child in fileNames)
         {
             if (m_ShopItemMenu == null) m_ShopItemMenu = new ShopMenu();
 			m_ShopItemMenu.Add(GetShopItemKind(child), 
 			                   CSV2ListReader(child));
 			
         }
+	}
+
+	private void Start()
+	{
+        // foreach (string child in fileNames)
+        // {
+        //     if (m_ShopItemMenu == null) m_ShopItemMenu = new ShopMenu();
+		// 	m_ShopItemMenu.Add(GetShopItemKind(child), 
+		// 	                   CSV2ListReader(child));
+			
+        // }
 
 	}
 
 	private void Update()
 	{
-		if(m_static_ShopItemMenu.Count == 0 && m_ShopItemMenu.Count != 0)
-		    m_static_ShopItemMenu = m_ShopItemMenu;
+		if(m_static_ShopItemMenu.Count == 0 && m_ShopItemMenu.Count != 0){
+			m_static_ShopItemMenu = m_ShopItemMenu;
+		}
+		    
 	}
 
 	public static ShopMenu getShopMenuDictionary()
 	{
-		
 		return m_static_ShopItemMenu;
 	}
 
@@ -106,23 +114,29 @@ public class ShopManager : IManager
 		return null;
 	}
 
-	public static List<GameObject> GetShopItemGameObj(ShopItemKind kind)
-	{
-		
+	public static void RefreshShopItemGameObj(ShopItemKind kind){
+		List<ShopItemData> List_Temp = GetShopItemDatas(kind);
+		if(List_Temp == null) return;
+		List<GameObject> List_GameObj = m_ShopItemMenu_ShowOn[kind];
+		if(List_GameObj == null) return;
+		for(int i = 0;i < List_GameObj.Count;i++){
+			Buy_Button Temp_buy_Button = List_GameObj[i].transform.Find("Button").gameObject.GetComponent<Buy_Button>();
+			Temp_buy_Button.setShopItemData(List_Temp[i],kind);
+		}
+	}
+
+	public static List<GameObject> GetShopItemGameObj(ShopItemKind kind){
 		List<ShopItemData> List_Temp = GetShopItemDatas(kind);
 		if (List_Temp == null) return null;
 
 		List<GameObject> List_ObjTemp = new List<GameObject>();
 
-		foreach(ShopItemData child in List_Temp)
-		{
-			if (child.IsOpen)
-			{
+		foreach(ShopItemData child in List_Temp){
+			if (child.IsOpen){
 				List_ObjTemp.Add(Instantiate(child.ShopObj));
 				List_ObjTemp[List_ObjTemp.Count - 1].transform.Find("Image").GetComponent<Image>().sprite = child.ShopImage;
 				Buy_Button Temp_buy_Button = List_ObjTemp[List_ObjTemp.Count - 1].transform.Find("Button").gameObject.AddComponent<Buy_Button>();
 				Temp_buy_Button.setShopItemData(child,kind);
-                
 			}
 		}
 		if (m_ShopItemMenu_ShowOn.ContainsKey(kind)) m_ShopItemMenu_ShowOn.Remove(kind);

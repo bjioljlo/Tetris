@@ -31,7 +31,7 @@ public class AdManager : IManager {
             m_AdManager = this;
             DontDestroyOnLoad(this);
         }
-        else if (ins != this)
+        else if (m_AdManager != this)
         {
             Destroy(gameObject);
         }

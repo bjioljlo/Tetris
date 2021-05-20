@@ -50,7 +50,9 @@ public class ctl_ScrollView : MonoBehaviour {
 
 		}
 		content.GetComponent<RectTransform>().sizeDelta = new Vector2(1, 1);
-		//setScrollView_content();
+		//
+		PlayerManager.set_mainPlayer(PlayerManager.LoadPlayerInfo_Local());
+		setScrollView_content();
 	}
 	
 	// Update is called once per frame
@@ -58,8 +60,7 @@ public class ctl_ScrollView : MonoBehaviour {
 		
 	}
     
-	public void setScrollView_content()
-	{
+	public void setScrollView_content(){
 		//先檢查是否有實體化過
 		if(List_ShopContentObj != null && ShopManager.CompareShopItemData(shopkind,List_ShopContentObj))
 		{

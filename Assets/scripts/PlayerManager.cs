@@ -55,8 +55,6 @@ public class PlayerManager : IManager {
 
 	private void Start()
 	{
-
-
 		InitPlayerManager();
 		set_Board();
 	}
@@ -137,8 +135,10 @@ public class PlayerManager : IManager {
 		PlayerPrefs.SetInt("PlayerHighscore", playerInfo.Highscore);
 		PlayerPrefs.SetInt("GoldCoin", playerInfo.GoldCoin);
 
-		string s = JsonUtility.ToJson(main_playerInfo);
+		string s = JsonUtility.ToJson(main_playerInfo.ItemDatas);
 		PlayerPrefs.SetString("ItemDatas", s);
+		string d = JsonUtility.ToJson(main_playerInfo.PresetItemDatas);
+		PlayerPrefs.SetString("PresetItemDatas", d);
 	}
 
 	public static playerInfo LoadPlayerInfo_Local()
@@ -154,21 +154,24 @@ public class PlayerManager : IManager {
 		temp.GoldCoin = Goldcoin;
 
 		string s = PlayerPrefs.GetString("ItemDatas");
-		playerInfo vplayerInfo = JsonUtility.FromJson<playerInfo>(s);
-		if (temp.ItemDatas == null)
-        {
-            temp.ItemDatas = new List<ShopItemData>();
-        }
-		if(vplayerInfo != null)
-		{
-			foreach (ShopItemData child in vplayerInfo.ItemDatas)
-            {
-                if (ShopManager.GetShopData_ByShopNumber(child.ShopNumber) != null)
-                {
+		playerInfo.MyList<ShopItemData> ItemDatas = JsonUtility.FromJson<playerInfo.MyList<ShopItemData>>(s);
+		temp.ItemDatas = new playerInfo.MyList<ShopItemData>();
+		if(ItemDatas != null){
+			foreach (ShopItemData child in ItemDatas.ToList()){
+                if (ShopManager.GetShopData_ByShopNumber(child.ShopNumber) != null){
                     temp.ItemDatas.Add(ShopManager.GetShopData_ByShopNumber(child.ShopNumber));
                 }
-
             }
+		}
+		string d = PlayerPrefs.GetString("PresetItemDatas");
+		playerInfo.MyList<ShopItemData> vPresetItemDatas = JsonUtility.FromJson<playerInfo.MyList<ShopItemData>>(d);
+		temp.PresetItemDatas = new playerInfo.MyList<ShopItemData>();
+		if(vPresetItemDatas != null){
+			foreach (ShopItemData child in vPresetItemDatas.ToList()){
+				if (ShopManager.GetShopData_ByShopNumber(child.ShopNumber) != null){
+					temp.SetPresetItemData(ShopManager.GetShopData_ByShopNumber(child.ShopNumber));
+				}
+			}
 		}
 
 
@@ -343,6 +346,8 @@ public class PlayerManager : IManager {
 		if (vShopData.ShopPrice == -999)
         {
             Debug.Log("已購買過了");
+			main_playerInfo.SetPresetItemData(vShopData);
+			SavePlayerInfo_Local(main_playerInfo);
             return;
         }
 
@@ -379,5 +384,35 @@ public class playerInfo
 	public int Highscore;
 	public string Passwd;
 	public int GoldCoin;
-	public List<ShopItemData> ItemDatas;
+	[SerializeField]
+	public MyList<ShopItemData> ItemDatas;
+	
+	[SerializeField]
+	public MyList<ShopItemData> PresetItemDatas;
+	public void SetPresetItemData(ShopItemData _itemData){
+		if(PresetItemDatas == null){
+			PresetItemDatas = new MyList<ShopItemData>();
+		}
+		if(_itemData == null) return;
+		foreach(ShopItemData child in PresetItemDatas.ToList()){
+			if(int.Parse(child.ShopID)/100 == int.Parse(_itemData.ShopID)/100){
+				PresetItemDatas.Remove(child);
+				break;
+			}
+		}
+		PresetItemDatas.Add(_itemData);
+	}
+	//為了可以存檔寫的list泛型，存檔請都用這個
+	[Serializable]
+	public class MyList<T>{
+		[SerializeField] 
+		List<T> target;
+		public List<T> ToList(){return target;}
+		public MyList(){this.target = new List<T>();}
+		public void Add(T _data){this.target.Add(_data);}
+		public void Remove(T _data){this.target.Remove(_data);}
+		public bool Contains(T _data){return this.target.Contains(_data);}
+		public int IndexOf(T _data){return this.target.IndexOf(_data);}
+	}
+
 }

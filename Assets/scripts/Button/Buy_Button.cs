@@ -45,12 +45,17 @@ public class Buy_Button : IButton {
 	{
 	    m_ShopItemData = shopItemData;
         shopItemKind = m_shopItemKind;
-		foreach(ShopItemData child in PlayerManager.get_main_playerInfo().ItemDatas)
+		foreach(ShopItemData child in PlayerManager.get_main_playerInfo().ItemDatas.ToList())
 		{
 			if(m_ShopItemData.ShopNumber == child.ShopNumber)
 			{
 				m_ShopItemData.ShopPrice = -999;
 				transform.Find("Text").GetComponent<Text>().text = "已購買";
+				if(PlayerManager.get_main_playerInfo().PresetItemDatas.Contains(m_ShopItemData)){
+					transform.Find("Text").GetComponent<Text>().text = "使用中";
+					Debug.Log("kind:"+shopItemKind + "/data:"+shopItemData.ShopNumber);
+					PlayerManager.BuyWithCoin(m_ShopItemData,shopItemKind);
+				}
 				return;
 			}
 		}
@@ -60,8 +65,7 @@ public class Buy_Button : IButton {
 	{
 		PlayerManager.BuyWithCoin(m_ShopItemData,shopItemKind);
 		Grid.getGrid.Coin = PlayerManager.get_main_playerInfo().GoldCoin;
-		//Coin_Text coin_text = FindObjectOfType<Coin_Text>();
-        //coin_text.SetText(Grid.getGrid.Coin.ToString());
-		setShopItemData(m_ShopItemData, shopItemKind);
+		ShopManager.RefreshShopItemGameObj(shopItemKind);
+		//setShopItemData(m_ShopItemData, shopItemKind);
 	}
 }
