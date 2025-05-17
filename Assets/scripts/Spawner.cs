@@ -187,14 +187,6 @@ public class Spawner : MonoBehaviour {
 		FindObjectOfType<Pause_Button>().moveOut();
 		FindObjectOfType<Coin_Text>().moveIn();
 
-		if (AdManager.IsJumpAdsLoaded()){
-			AdManager.ShowJumpAds();	
-		}
-		else{
-			Debug.Log("ads is not ready");
-		}
-
-
 		if(m_WatchAdsTime >= 5 && btn_WatchAds.IsActive())
 		{
 			InvokeRepeating("WatchAdsTimer", 1.2f, 1f);

@@ -7,7 +7,6 @@ public abstract class ISetting : IUI {
     public Scrollbar scrollbar_BGM;
     public Scrollbar scrollbar_Effect;
 	public Dropdown dropdown_BonusAdsSupplier;
-	public AdRewardedVideo m_adRewardedVideo;
 
 	public override void startInit()
 	{

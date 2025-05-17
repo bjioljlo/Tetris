@@ -64,8 +64,6 @@ public class DebugManager : IManager {
 						FindObjectOfType<Spawner>().IsDownItem, DebugSetItemDown);
 		SetToggleSymbol(vDebugPage,"Scroll View/Viewport/Content/DebugLine6/Debug_show",
 						FindObjectOfType<Debug_log>().IsdebugAreaOn, DebugSetDebugLog);
-		SetDropdownSymbol(vDebugPage, "Scroll View/Viewport/Content/DebugLine7/BonusADS_Dropdown",
-		                  AdManager.bonusAdsSupplier.GetHashCode(), DebugSetBonusAdsSupplier);
 		SetButtonSymbol(vDebugPage, "Scroll View/Viewport/Content/DebugLine8/btn_localNotification",
 		                DebugSetLocalNotification);
 		SetToggleSymbol(vDebugPage, "Scroll View/Viewport/Content/DebugLine9/Debug_IsUseWebserver", 
@@ -153,24 +151,6 @@ public class DebugManager : IManager {
 	static void DebugSetDebugLog(bool IsOn)
 	{
 		FindObjectOfType<Debug_log>().IsdebugAreaOn = IsOn;
-	}
-	static void DebugSetBonusAdsSupplier(int supplier)
-	{
-		if(AdManager.bonusAdsSupplier.GetHashCode() == supplier)
-		{
-			return;
-		}
-		switch(supplier)
-		{
-			case 0:
-				AdManager.bonusAdsSupplier = AdRewardedVideo.BonusAdsSupplier.Google;
-				break;
-			case 1:
-				AdManager.bonusAdsSupplier = AdRewardedVideo.BonusAdsSupplier.Unity;
-				break;
-			default:
-				break;
-		}
 	}
 	static void DebugSetLocalNotification()
 	{

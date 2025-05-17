@@ -109,8 +109,6 @@ public class Grid {
 	public bool IsWebserverOn{ get { return _IsWebserverOn; }}
 	bool _IsdebugAreaOn = false;//debuglog區域顯示開關
 	public bool IsdebugAreaOn{ get { return _IsdebugAreaOn; }}
-	AdRewardedVideo.BonusAdsSupplier _BonusAdsSupplier = AdRewardedVideo.BonusAdsSupplier.Google;
-	public AdRewardedVideo.BonusAdsSupplier BonusAdsSupplier{ get { return _BonusAdsSupplier; }}
 
 	public void ResetGrid()
 	{
