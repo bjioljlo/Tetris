@@ -1,8 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-public class WatchADS_Button : IButton
+﻿public class WatchADS_Button : IButton
 {
     public override void moveIn()
     {

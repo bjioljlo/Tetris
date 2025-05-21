@@ -1,8 +1,3 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.UI;
+﻿public class Setting_Button : IButton {
 
-public class Setting_Button : IButton {
-   
 }

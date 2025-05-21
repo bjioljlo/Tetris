@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class Shop_Button : IButton {
 	ctl_ScrollView[] array_scrollView = null;

@@ -1,9 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.UI;
-
-public class CreatePlayer_Button : IButton
+﻿public class CreatePlayer_Button : IButton
 {
     public override void ClickAction()
     {

@@ -1,8 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-public class NormalGroup : Group
+﻿public class NormalGroup : Group
 {
 
 	public override void IPauseUpdate()

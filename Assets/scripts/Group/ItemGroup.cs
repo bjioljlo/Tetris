@@ -1,9 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using System.Timers;
-
-public class ItemGroup : Group {
+﻿public class ItemGroup : Group {
     //物品效果事件
     public Actionabl m_itemAct;
 	//人物效果事件

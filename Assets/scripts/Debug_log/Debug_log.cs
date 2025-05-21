@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -22,9 +21,7 @@ public class Debug_log : MonoBehaviour {
 	Vector3 localpos = new Vector3();
 	GameObject Obj_debug_text;
 	int debug_totalLineNumber = 0;
-	//bool debug_setAreaStart = false;
 
-	// Use this for initialization
 	void Awake () {
 		sv_debug_Panel = GameObject.Find("debug_ScrollView");
 		IsShowLogToggle = GameObject.Find("Debug_show").GetComponent<Toggle>();
@@ -34,7 +31,6 @@ public class Debug_log : MonoBehaviour {
 		localpos = sv_debug_Panel.transform.localPosition;
 	}
 	
-	// Update is called once per frame
 	void Update () {
 		SetLogOn(IsdebugAreaOn);
 	}
@@ -100,10 +96,7 @@ public class Debug_log : MonoBehaviour {
 
 		newString += "<color=#" +r+g+b+a + ">";
 
-		//if (myLogQueue.Count <= 0)
 		newString += "[" + type + "] : " + myLog;
-		//else
-			//newString += "\n [" + type + "] : " + myLog;
 
 		newString += "</color>";
 
@@ -135,7 +128,6 @@ public class Debug_log : MonoBehaviour {
 		if (debug_LineNumber == debug_Linetemp)
 			return;
 		debug_context.sizeDelta = new Vector2(debug_context.sizeDelta.x, 28 * debug_totalLineNumber);
-		//debug_text.GetComponent<RectTransform>().sizeDelta = debug_context.sizeDelta;
 		if(debug_totalLineNumber>23)
 			debug_context.localPosition = new Vector3(debug_context.localPosition.x , 28 * (debug_totalLineNumber - 23) , debug_context.localPosition.z);
 

@@ -1,31 +1,30 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
-public class Spawner : MonoBehaviour {
+public class Spawner : MonoBehaviour
+{
 	public GameObject[] groups;
-    public GameObject[] items;
+	public GameObject[] items;
 	public GameObject bag;
 	public GameObject coin;
-    public Button Btn_ADS;
-    public Button Btn_Setting;
-    public Button Btn_CloseSetting;
-    public Button Btn_Shop;
-    public Button Btn_CloseShop;
+	public Button Btn_ADS;
+	public Button Btn_Setting;
+	public Button Btn_CloseSetting;
+	public Button Btn_Shop;
+	public Button Btn_CloseShop;
 	public Button Btn_Account;
 	public Button Btn_CloseAccount;
-    //人物
-    GameObject[] mans;
+	//人物
+	GameObject[] mans;
 
 	public bool IsDownItem = false;
 
-    public Button btn_left;
-    public Button btn_right;
-    public Button btn_down;
-    public Button btn_row;
+	public Button btn_left;
+	public Button btn_right;
+	public Button btn_down;
+	public Button btn_row;
 
-    //InputField DebugBoxSpeed;
+	//InputField DebugBoxSpeed;
 
 	public Text txt_WatchAdsTime;
 	public Button btn_WatchAds;
@@ -33,27 +32,28 @@ public class Spawner : MonoBehaviour {
 	public Sprite BoxSkin = null;
 
 	public void Awake()
-    {
+	{
 		Grid.getGrid.InitGrids();
 		Grid.getGrid.setSpawner(this);
-    }
+	}
 
 	// Use this for initialization
-	void Start () {
+	void Start()
+	{
 
-        Btn_ADS = GameObject.Find("Btn_ADS").GetComponent<Button>();
+		Btn_ADS = GameObject.Find("Btn_ADS").GetComponent<Button>();
 
-        Btn_Setting = GameObject.Find("Btn_Setting").GetComponent<Button>();
-        Btn_Setting.onClick.AddListener(OpenSetting);
+		Btn_Setting = GameObject.Find("Btn_Setting").GetComponent<Button>();
+		Btn_Setting.onClick.AddListener(OpenSetting);
 
-        Btn_CloseSetting = GameObject.Find("Btn_CloseSetting").GetComponent<Button>();
-        Btn_CloseSetting.onClick.AddListener(CloseSetting);
+		Btn_CloseSetting = GameObject.Find("Btn_CloseSetting").GetComponent<Button>();
+		Btn_CloseSetting.onClick.AddListener(CloseSetting);
 
-        Btn_Shop = GameObject.Find("Btn_Shop").GetComponent<Button>();
-        Btn_Shop.onClick.AddListener(OpenShop);
+		Btn_Shop = GameObject.Find("Btn_Shop").GetComponent<Button>();
+		Btn_Shop.onClick.AddListener(OpenShop);
 
-        Btn_CloseShop = GameObject.Find("Btn_CloseShop").GetComponent<Button>();
-        Btn_CloseShop.onClick.AddListener(CloseShop);
+		Btn_CloseShop = GameObject.Find("Btn_CloseShop").GetComponent<Button>();
+		Btn_CloseShop.onClick.AddListener(CloseShop);
 
 		Btn_Account = GameObject.Find("Btn_Comic").GetComponent<Button>();
 		Btn_Account.onClick.AddListener(OpenAccount);
@@ -61,12 +61,12 @@ public class Spawner : MonoBehaviour {
 		Btn_CloseAccount = GameObject.Find("Btn_CloseAccount").GetComponent<Button>();
 		Btn_CloseAccount.onClick.AddListener(CloseAccount);
 
-        mans = GameObject.FindGameObjectsWithTag("man");
+		mans = GameObject.FindGameObjectsWithTag("man");
 
-        btn_left = GameObject.Find("Btn_left").GetComponent<Button>();
-        btn_right = GameObject.Find("Btn_right").GetComponent<Button>();
-        btn_down = GameObject.Find("Btn_down").GetComponent<Button>();
-        btn_row = GameObject.Find("Btn_Row").GetComponent<Button>();
+		btn_left = GameObject.Find("Btn_left").GetComponent<Button>();
+		btn_right = GameObject.Find("Btn_right").GetComponent<Button>();
+		btn_down = GameObject.Find("Btn_down").GetComponent<Button>();
+		btn_row = GameObject.Find("Btn_Row").GetComponent<Button>();
 
 		txt_WatchAdsTime = GameObject.Find("Txt_WatchAdsTime").GetComponent<Text>();
 		m_WatchAdsTime = Grid.getGrid.WatchAdsTimer;
@@ -74,28 +74,29 @@ public class Spawner : MonoBehaviour {
 		txt_WatchAdsTime.gameObject.SetActive(false);
 
 		btn_WatchAds = GameObject.Find("Btn_WatchADS").GetComponent<Button>();
-        
+
 
 	}
-	
-	public void spawnNext() {
 
-        BoxGroupFactory creatgroup = new CreatGroupFactoryByName(mans, btn_left, btn_right, btn_down, btn_row);
+	public void spawnNext()
+	{
 
-		if(IsDownItem)//物品開關
+		BoxGroupFactory creatgroup = new CreatGroupFactoryByName(mans, btn_left, btn_right, btn_down, btn_row);
+
+		if (IsDownItem)//物品開關
 		{
 			int i = Random.Range(0, groups.Length + 1);
-            if (i == groups.Length)
-            {
-                i = Random.Range(0, items.Length);
-                creatgroup.setTarget(Instantiate(items[i], transform.position, Quaternion.identity));
-                creatgroup.CreatGroupByName(BoxGroupFactory.GroupType.itemGroup);
-            }
-            else
-            {
-                creatgroup.setTarget(Instantiate(groups[i], transform.position, Quaternion.identity));
-                creatgroup.CreatGroupByName(BoxGroupFactory.GroupType.normalGroup);
-            }
+			if (i == groups.Length)
+			{
+				i = Random.Range(0, items.Length);
+				creatgroup.setTarget(Instantiate(items[i], transform.position, Quaternion.identity));
+				creatgroup.CreatGroupByName(BoxGroupFactory.GroupType.itemGroup);
+			}
+			else
+			{
+				creatgroup.setTarget(Instantiate(groups[i], transform.position, Quaternion.identity));
+				creatgroup.CreatGroupByName(BoxGroupFactory.GroupType.normalGroup);
+			}
 
 		}
 		else
@@ -103,19 +104,19 @@ public class Spawner : MonoBehaviour {
 			int i = Random.Range(0, groups.Length);
 			creatgroup.setTarget(Instantiate(groups[i], transform.position, Quaternion.identity));
 			creatgroup.setBoxSkin(BoxSkin);
-            creatgroup.CreatGroupByName(BoxGroupFactory.GroupType.normalGroup);
-            
+			creatgroup.CreatGroupByName(BoxGroupFactory.GroupType.normalGroup);
+
 		}
 
 	}
 
 	public void spawnBag()
 	{
-        BoxGroupFactory creatgroup = new CreatGroupFactoryByName(mans, btn_left, btn_right, btn_down, btn_row);
+		BoxGroupFactory creatgroup = new CreatGroupFactoryByName(mans, btn_left, btn_right, btn_down, btn_row);
 
 
 		int times = Random.Range(0, 5 - Grid.getGrid.InitTimes + 1);
-		for (int i = 0; i <= times;i++)
+		for (int i = 0; i <= times; i++)
 		{
 			int x = Random.Range(0, Grid.getGrid.Width);
 			int y = Random.Range(Grid.getGrid.Height_Now - Grid.getGrid.Height, Grid.getGrid.Height_Now);
@@ -129,7 +130,7 @@ public class Spawner : MonoBehaviour {
 		BoxGroupFactory creatgroup = new CreatGroupFactoryByName(mans, btn_left, btn_right, btn_down, btn_row);
 
 		int times = Random.Range(0, 5 - Grid.getGrid.InitTimes + 1);
-		for (int i = 0; i <= times;i++)
+		for (int i = 0; i <= times; i++)
 		{
 			int x = Random.Range(0, Grid.getGrid.Width);
 			int y = Random.Range(Grid.getGrid.Height_Now - Grid.getGrid.Height, Grid.getGrid.Height_Now);
@@ -145,35 +146,35 @@ public class Spawner : MonoBehaviour {
 	}
 
 	public void CloseAccount()
-    {
+	{
 		FindObjectOfType<mainAccount_Account>().moveOut();
 		FindObjectOfType<Comic_Button>().moveIn();
-    }
+	}
 
 	public void OpenShop()
-    {
-        FindObjectOfType<mainShop_Shop>().moveIn();
-        FindObjectOfType<Shop_Button>().moveOut();
-    }
+	{
+		FindObjectOfType<mainShop_Shop>().moveIn();
+		FindObjectOfType<Shop_Button>().moveOut();
+	}
 
-    public void CloseShop()
-    {
-        FindObjectOfType<mainShop_Shop>().moveOut();
-        FindObjectOfType<Shop_Button>().moveIn();
-    }
+	public void CloseShop()
+	{
+		FindObjectOfType<mainShop_Shop>().moveOut();
+		FindObjectOfType<Shop_Button>().moveIn();
+	}
 
 
-    public void OpenSetting()
-    {
-        FindObjectOfType<mainSetting_Setting>().moveIn();
-        FindObjectOfType<Setting_Button>().moveOut();
-    }
+	public void OpenSetting()
+	{
+		FindObjectOfType<mainSetting_Setting>().moveIn();
+		FindObjectOfType<Setting_Button>().moveOut();
+	}
 
-    public void CloseSetting()
-    {
-        FindObjectOfType<mainSetting_Setting>().moveOut();
-        FindObjectOfType<Setting_Button>().moveIn();
-    }
+	public void CloseSetting()
+	{
+		FindObjectOfType<mainSetting_Setting>().moveOut();
+		FindObjectOfType<Setting_Button>().moveIn();
+	}
 
 	public void GameOver()
 	{
@@ -187,18 +188,18 @@ public class Spawner : MonoBehaviour {
 		FindObjectOfType<Pause_Button>().moveOut();
 		FindObjectOfType<Coin_Text>().moveIn();
 
-		if(m_WatchAdsTime >= 5 && btn_WatchAds.IsActive())
+		if (m_WatchAdsTime >= 5 && btn_WatchAds.IsActive())
 		{
 			InvokeRepeating("WatchAdsTimer", 1.2f, 1f);
 			txt_WatchAdsTime.gameObject.SetActive(true);
 		}
 
-    }
+	}
 
-	 void WatchAdsTimer()
+	void WatchAdsTimer()
 	{
 		m_WatchAdsTime = m_WatchAdsTime - 1;
-		if(m_WatchAdsTime > 0)
+		if (m_WatchAdsTime > 0)
 		{
 			txt_WatchAdsTime.text = m_WatchAdsTime.ToString();
 		}

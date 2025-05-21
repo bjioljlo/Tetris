@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public abstract class Directable {
 
@@ -25,7 +23,7 @@ public abstract class Directable {
             // Block in grid cell (and not part of same group)?
             if (Grid.getGrid.grids[(int)v.x][(int)v.y] != null &&
                 Grid.getGrid.grids[(int)v.x][(int)v.y].parent != m_target.transform &&
-			    Grid.getGrid.grids[(int)v.x][(int)v.y].GetComponentInParent<Group>().getGroupType() == Group.groupType.Normal)//是一般方塊
+                Grid.getGrid.grids[(int)v.x][(int)v.y].GetComponentInParent<Group>().getGroupType() == Group.groupType.Normal)//是一般方塊
                 return false;
         }
         return true;

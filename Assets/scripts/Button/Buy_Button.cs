@@ -1,9 +1,8 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
-public class Buy_Button : IButton {
+public class Buy_Button : IButton
+{
 
 	ShopItemData m_ShopItemData;
 	ShopItemKind shopItemKind;
@@ -13,48 +12,23 @@ public class Buy_Button : IButton {
 		Debug.Log("Click buy " + this.gameObject.name);
 		Debug.Log(m_ShopItemData.IsOpen);
 		ClickBuySkin();
-
-  //      //從這裡看
-		//switch(shopItemKind)
-		//{
-		//	case ShopItemKind.Man:
-		//		{
-		//			FindObjectOfType<Man>().setManSkin(m_ShopItemData.ShopImage);
-  //                  break;
-		//		}
-		//	case ShopItemKind.Box:
-		//		{
-		//			Spawner spawner = FindObjectOfType<Spawner>();
-		//			spawner.BoxSkin = m_ShopItemData.ShopImage;
-		//			break;
-		//		}
-		//	case ShopItemKind.Lava:
-		//		{
-		//			mainLava m_mainLava = FindObjectOfType<mainLava>();
-		//			m_mainLava.setLavaSkin(m_ShopItemData.ShopImage);
-		//			break;
-		//		}
-		//	default:
-		//		break;
-
-		//}
-
 	}
 
-	public void setShopItemData(ShopItemData shopItemData,ShopItemKind m_shopItemKind)
+	public void setShopItemData(ShopItemData shopItemData, ShopItemKind m_shopItemKind)
 	{
-	    m_ShopItemData = shopItemData;
-        shopItemKind = m_shopItemKind;
-		foreach(ShopItemData child in PlayerManager.get_main_playerInfo().ItemDatas.ToList())
+		m_ShopItemData = shopItemData;
+		shopItemKind = m_shopItemKind;
+		foreach (ShopItemData child in PlayerManager.get_main_playerInfo().ItemDatas.ToList())
 		{
-			if(m_ShopItemData.ShopNumber == child.ShopNumber)
+			if (m_ShopItemData.ShopNumber == child.ShopNumber)
 			{
 				m_ShopItemData.ShopPrice = -999;
 				transform.Find("Text").GetComponent<Text>().text = "已購買";
-				if(PlayerManager.get_main_playerInfo().PresetItemDatas.Contains(m_ShopItemData)){
+				if (PlayerManager.get_main_playerInfo().PresetItemDatas.Contains(m_ShopItemData))
+				{
 					transform.Find("Text").GetComponent<Text>().text = "使用中";
-					Debug.Log("kind:"+shopItemKind + "/data:"+shopItemData.ShopNumber);
-					PlayerManager.BuyWithCoin(m_ShopItemData,shopItemKind);
+					Debug.Log("kind:" + shopItemKind + "/data:" + shopItemData.ShopNumber);
+					PlayerManager.BuyWithCoin(m_ShopItemData, shopItemKind);
 				}
 				return;
 			}
@@ -63,9 +37,8 @@ public class Buy_Button : IButton {
 	}
 	public void ClickBuySkin()
 	{
-		PlayerManager.BuyWithCoin(m_ShopItemData,shopItemKind);
+		PlayerManager.BuyWithCoin(m_ShopItemData, shopItemKind);
 		Grid.getGrid.Coin = PlayerManager.get_main_playerInfo().GoldCoin;
 		ShopManager.RefreshShopItemGameObj(shopItemKind);
-		//setShopItemData(m_ShopItemData, shopItemKind);
 	}
 }

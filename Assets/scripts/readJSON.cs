@@ -210,7 +210,7 @@ public class readJSON : MonoBehaviour {
 				MyPlayerData = null;
 				return;
 			}
-				 
+
             MyPlayerData.Gender = getGender(In_Gender.value);
             
             if (In_Age.text != "")
@@ -318,7 +318,7 @@ public class readJSON : MonoBehaviour {
 
 	public IEnumerator downloadjson()
 	{
-      
+
 		var www = UnityWebRequest.Get(Download);
 		if (headers.ContainsKey("COOKIE"))
         {
@@ -412,7 +412,6 @@ public class readJSON : MonoBehaviour {
 
 		if (!WebResposeCod(www))
 			yield return null;
-		    
 
 		//if (www.isNetworkError)
 		if (www.result == UnityWebRequest.Result.ConnectionError)
@@ -423,7 +422,7 @@ public class readJSON : MonoBehaviour {
 
 
 		if(www.downloadHandler.text == "[[]]" || 
-		   www.downloadHandler.text == "Error in selectingTable 'Test.TopRank' doesn't exist")
+		www.downloadHandler.text == "Error in selectingTable 'Test.TopRank' doesn't exist")
 		{
 			Debug.LogWarning("DtatBase is 忙碌");
 			yield break;

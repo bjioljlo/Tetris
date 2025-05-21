@@ -1,17 +1,16 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
-public abstract class ManMoveFactory {
+public abstract class ManMoveFactory
+{
 
-	public abstract ManMoveable CreatManMove(GameObject target, ManMoveable manMoveable,Group group);
+	public abstract ManMoveable CreatManMove(GameObject target, ManMoveable manMoveable, Group group);
 }
 
 public class CreateMoveableFactory : ManMoveFactory
 {
 	public override ManMoveable CreatManMove(GameObject target, ManMoveable manMoveable, Group group)
 	{
-		switch(group.Type)
+		switch (group.Type)
 		{
 			case Group.groupType.Normal:
 				return new NormalManMove(target, manMoveable);

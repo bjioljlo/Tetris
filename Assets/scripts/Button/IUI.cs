@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public abstract class IUI : MonoBehaviour
 {
@@ -19,11 +17,11 @@ public abstract class IUI : MonoBehaviour
     {
         Transform_my = GetComponent<RectTransform>();
 
-        if(Transform_InPos)
-        InPos = Transform_InPos.anchoredPosition;
+        if (Transform_InPos)
+            InPos = Transform_InPos.anchoredPosition;
 
-        if(Transform_OutPos)
-        OutPos = Transform_OutPos.anchoredPosition;
+        if (Transform_OutPos)
+            OutPos = Transform_OutPos.anchoredPosition;
     }
     public void moveUpdate(Vector2 pos)
     {
@@ -33,24 +31,23 @@ public abstract class IUI : MonoBehaviour
     public virtual void moveOut()
     {
         iTween.ValueTo(gameObject, iTween.Hash("easetype", iTween.EaseType.easeInOutExpo,
-                                              "from", InPos,
-                                              "to", OutPos,
-                                              "onupdate", "moveUpdate",
-                                           "time", 0.5f));
+                                                "from", InPos,
+                                                "to", OutPos,
+                                                "onupdate", "moveUpdate",
+                                                "time", 0.5f));
     }
 
     public virtual void moveIn()
     {
         iTween.ValueTo(gameObject, iTween.Hash("easetype", iTween.EaseType.easeInOutExpo,
-                                               "from", OutPos,
-                                               "to", InPos,
-                                              "onupdate", "moveUpdate",
-                                           "time", 0.5f));
+                                                "from", OutPos,
+                                                "to", InPos,
+                                                "onupdate", "moveUpdate",
+                                                "time", 0.5f));
     }
 }
 
-
-public abstract class IAccount:IUI
+public abstract class IAccount : IUI
 {
-	
+
 }

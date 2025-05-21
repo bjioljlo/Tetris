@@ -1,0 +1,100 @@
+{
+  "python.testing.pytestArgs": ["UnitTest"],
+  "python.testing.unittestEnabled": false,
+  "python.testing.pytestEnabled": true,
+  "files.exclude": {
+    "out": true, // set this to true to hide the "out" folder with the compiled JS files
+    "dist": true,
+    "**/*.pyc": true,
+    ".nyc_output": true,
+    "obj": true,
+    "bin": true,
+    "**/__pycache__": true,
+    "**/node_modules": true,
+    ".vscode-test": false,
+    ".vscode test": false,
+    "**/.mypy_cache/**": true,
+    // Root directory
+    "[Bb]uild/": true,
+    "[Bb]uilds/": true,
+    "[L]ibrary/": true,
+    "[Ll]ogs/": true,
+    "[Oo]bj/": true,
+    "[Tt]emp/": true,
+    "[Pp]roject[Ss]ettings/": true,
+    "[Mm]emoryCaptures/": true,
+    "[Uu]ser[Ss]ettings/": true,
+    // Unity generated .csproj and .sln files in root directory
+    "*.csproj": true,
+    "*.sln": true,
+    "**/.DS_Store": true,
+    "**/.git": true,
+    "**/.gitignore": true,
+    "**/.gitmodules": true,
+    // File exensions
+    "**/*.booproj": true,
+    "**/*.pidb": true,
+    "**/*.suo": true,
+    "**/*.user": true,
+    "**/*.userprefs": true,
+    "**/*.unityproj": true,
+    // Unity formats
+    "**/*.mat": true,
+    "**/*.meta": true,
+    "**/*.prefab": true,
+    "**/*.unity": true,
+    "**/*.unityasset": true,
+    "**/*.asset": true,
+    "**/*.cubemap": true,
+    "**/*.flare": true,
+    // Binaries
+    "**/*.dll": true,
+    "**/*.exe": true,
+    "**/*.bin": true,
+    // Documents
+    "**/*.pdf": true,
+    "**/*.doc": true,
+    "**/*.docx": true,
+    // Images
+    "**/*.gif": true,
+    "**/*.ico": true,
+    "**/*.jpg": true,
+    "**/*.jpeg": true,
+    "**/*.png": true,
+    "**/*.psd": true,
+    "**/*.tga": true,
+    "**/*.tif": true,
+    "**/*.tiff": true,
+    // Audio
+    "**/*.mid": true,
+    "**/*.midi": true,
+    "**/*.wav": true,
+    "**/*.mp3": true,
+    // Media
+    "**/*.mp4": true,
+    "**/*.avi": true,
+    "**/*.mov": true,
+    // 3D models
+    "**/*.obj": true,
+    "**/*.OBJ": true,
+    "**/*.fbx": true,
+    "**/*.FBX": true,
+    "**/*.ma": true,
+    "**/*.MA": true,
+    "**/*.lxo": true,
+    "**/*.LXO": true,
+    "**/*.3ds": true,
+    "**/*.3DS": true,
+    "**/*.MAX": true,
+    "**/*.max": true
+  },
+  "search.exclude": {
+    "out": true, // set this to false to include "out" folder in search results
+    "dist": true,
+    "**/node_modules": true,
+    "coverage": true,
+    "languageServer*/**": true,
+    ".vscode-test": true,
+    ".vscode test": true
+  }
+}

@@ -1,8 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-public class Score_Text : IText {
+﻿public class Score_Text : IText {
 
 
 }

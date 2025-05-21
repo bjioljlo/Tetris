@@ -1,17 +1,16 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
-public abstract class Effectable {
-    public GameObject m_target;//物品gameobj
+public abstract class Effectable
+{
+	public GameObject m_target;//物品gameobj
 	public float delayTime;
 	public float showTime;
-    public Effectable (GameObject target)
-    {
+	public Effectable(GameObject target)
+	{
 		setTarget(target);
-    }
+	}
 
-    public abstract void show();
+	public abstract void show();
 
 	public void setTarget(GameObject target)
 	{
@@ -32,39 +31,38 @@ public abstract class Effectable {
 public class JumpEffect : Effectable
 {
 	public int jumpHeight;
-    public JumpEffect(GameObject target) : base(target)
-    {
+	public JumpEffect(GameObject target) : base(target)
+	{
 		setShowTime(0.5f);
 		setDelayTime(0);
-    }
+	}
 
-    public override void show()
-    {
+	public override void show()
+	{
 		iTween.MoveAdd(m_target, iTween.Hash("easetype", iTween.EaseType.easeInOutExpo,
-		                                     "amount", new Vector3(0, jumpHeight, 0),
-		                                                "time", showTime,
-		                                                "delay",delayTime));
-    }
+											"amount", new Vector3(0, jumpHeight, 0),
+											"time", showTime,
+											"delay", delayTime));
+	}
 
 	public void setJumpHeight(int height)
 	{
 		jumpHeight = height;
 	}
- 
 }
 
 public class StopEffect : Effectable
 {
-    public StopEffect(GameObject target) : base(target)
-    {
-		
-    }
+	public StopEffect(GameObject target) : base(target)
+	{
 
-    public override void show()
-    {
+	}
+
+	public override void show()
+	{
 		Debug.Log("停止");
 
-    }
+	}
 }
 
 public class BombEffect : Effectable
@@ -97,25 +95,25 @@ public class ItemEatEffect : Effectable
 	public ItemEatEffect(GameObject target) : base(target)
 	{
 		setShowTime(0.5f);
-        setDelayTime(0);
-        setAlpha(0);	
+		setDelayTime(0);
+		setAlpha(0);
 	}
 
 	public override void show()
 	{
 		Debug.Log("吃到");
 		iTween.MoveAdd(m_target, iTween.Hash("easetype", iTween.EaseType.easeInOutBounce,
-                                                       "amount", new Vector3(0, 1, 0),
-                                                        "time", showTime,
-                                                        "delay", delayTime));
-        iTween.FadeTo(m_target, iTween.Hash("time", showTime,
-                                            "delay", delayTime,
-                                            "alpha", alphaNumber,
-		                                    "easetype", iTween.EaseType.easeInBack));
+														"amount", new Vector3(0, 1, 0),
+														"time", showTime,
+														"delay", delayTime));
+		iTween.FadeTo(m_target, iTween.Hash("time", showTime,
+											"delay", delayTime,
+											"alpha", alphaNumber,
+											"easetype", iTween.EaseType.easeInBack));
 	}
 	public void setAlpha(float alpha)
-    {
-        alphaNumber = alpha;
-    }
+	{
+		alphaNumber = alpha;
+	}
 }
 
